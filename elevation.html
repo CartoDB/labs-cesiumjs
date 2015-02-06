@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Use correct character set. -->
+        <meta charset="utf-8">
+        <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+        <title>Hello World!</title>
+        <script src="Cesium/Cesium.js"></script>
+        <style>
+            @import url(Cesium/Widgets/widgets.css);
+
+            html, body, #cesiumContainer {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="cesiumContainer"></div>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script>
+            // New imagery provider with support for CartoDB's XYZ URLs
+            var CartoDBMapImageryProvider = Cesium.OpenStreetMapImageryProvider;
+            CartoDBMapImageryProvider.prototype.getCDNSubdomain = function (x, y) {  // Multi-WMS server selection
+                var subdomains = ['a', 'b', 'c', 'd'];
+                return subdomains[(x + y) % subdomains.length];
+            };
+            CartoDBMapImageryProvider.prototype.requestImage = function (x, y, level) {
+                var url = this._url.replace('{s}', this.getCDNSubdomain(x, y)).replace('{z}', level).replace('{x}', x).replace('{y}', y);
+                return Cesium.ImageryProvider.loadImage(this, url);
+            };
+
+            // New datasource which uses geoJSON from SQL for x, y and column "ele" for z.
+            var GeoJsonZDataSource = Cesium.GeoJsonDataSource;
+            GeoJsonZDataSource.prototype.load = function (data) {
+                data = data.features;
+                if (!Cesium.defined(data)) {
+                    throw new Cesium.DeveloperError("data must be defined.");
+                }
+
+                var entities = this._entityCollection;
+                entities.suspendEvents();
+                entities.removeAll();
+
+                for (var i = 0; i < data.length; i++) {
+                    var start = Cesium.Cartesian3.fromDegrees(data[i].geometry.coordinates[0], data[i].geometry.coordinates[1], 0.0);
+                    var end = Cesium.Cartesian3.fromDegrees(data[i].geometry.coordinates[0], data[i].geometry.coordinates[1], data[i].properties.ele * 2);  // *2 just to make them higher
+
+                    var polyline = new Cesium.PolylineGraphics();
+                    polyline.show = new Cesium.ConstantProperty(true);
+                    polyline.positions = new Cesium.ConstantProperty([start, end]);
+                    polyline.width = new Cesium.ConstantProperty(2);
+                    polyline.followSurface = new Cesium.ConstantProperty(false);
+
+                    var entity = new Cesium.Entity(i);
+                    entity.polyline = polyline;
+
+                    entities.add(entity);
+                }
+
+                entities.resumeEvents();
+                this._changed.raiseEvent(this);
+            };
+
+            var viewer = new Cesium.Viewer('cesiumContainer', {
+                terrainProvider : new Cesium.CesiumTerrainProvider({
+                    url : '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
+                })
+            });
+
+            // SQL API layer
+            var dataSource = new GeoJsonZDataSource();
+            viewer.dataSources.add(dataSource);
+
+            var sql = new cartodb.SQL({user: 'dcarrion', format: 'geoJSON'});
+            sql.execute("SELECT the_geom, ele FROM cesium_z")
+                    .done(function (data) {
+                        dataSource.load(data);
+                    })
+                    .error(function (errors) {
+                        console.log("errors:" + errors);
+                    });
+        </script>
+    </body>
+</html>
