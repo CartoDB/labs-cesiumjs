@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!-- Use correct character set. -->
         <meta charset="utf-8">
-        <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-        <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-        <title>Hello World!</title>
+        <title>CartoDB - Cesium example (elevation)</title>
+        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/favicons/favicon.ico?1411985985" rel="shortcut icon" type="image/vnd.microsoft.icon" />
         <script src="Cesium/Cesium.js"></script>
         <style>
             @import url(Cesium/Widgets/widgets.css);
@@ -25,17 +23,6 @@
         <div id="cesiumContainer"></div>
         <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
         <script>
-            // New imagery provider with support for CartoDB's XYZ URLs
-            var CartoDBMapImageryProvider = Cesium.OpenStreetMapImageryProvider;
-            CartoDBMapImageryProvider.prototype.getCDNSubdomain = function (x, y) {  // Multi-WMS server selection
-                var subdomains = ['a', 'b', 'c', 'd'];
-                return subdomains[(x + y) % subdomains.length];
-            };
-            CartoDBMapImageryProvider.prototype.requestImage = function (x, y, level) {
-                var url = this._url.replace('{s}', this.getCDNSubdomain(x, y)).replace('{z}', level).replace('{x}', x).replace('{y}', y);
-                return Cesium.ImageryProvider.loadImage(this, url);
-            };
-
             // New datasource which uses geoJSON from SQL for x, y and column "ele" for z.
             var GeoJsonZDataSource = Cesium.GeoJsonDataSource;
             GeoJsonZDataSource.prototype.load = function (data) {
@@ -50,7 +37,7 @@
 
                 for (var i = 0; i < data.length; i++) {
                     var start = Cesium.Cartesian3.fromDegrees(data[i].geometry.coordinates[0], data[i].geometry.coordinates[1], 0.0);
-                    var end = Cesium.Cartesian3.fromDegrees(data[i].geometry.coordinates[0], data[i].geometry.coordinates[1], data[i].properties.ele * 2);  // *2 just to make them higher
+                    var end = Cesium.Cartesian3.fromDegrees(data[i].geometry.coordinates[0], data[i].geometry.coordinates[1], data[i].properties.ele);
 
                     var polyline = new Cesium.PolylineGraphics();
                     polyline.show = new Cesium.ConstantProperty(true);
@@ -73,6 +60,18 @@
                     url : '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
                 })
             });
+
+            // Set initial position and rotation
+            var ellipsoid = Cesium.Ellipsoid.WGS84;
+            var west = Cesium.Math.toRadians(-0.75);
+            var south = Cesium.Math.toRadians(38.35);
+            var east = Cesium.Math.toRadians(-0.74);
+            var north = Cesium.Math.toRadians(38.33);
+            var rotation = Cesium.Math.toRadians(30);
+
+            var extent = new Cesium.Rectangle(west, south, east, north);
+            viewer.camera.viewRectangle(extent, ellipsoid);
+            viewer.camera.lookUp(rotation);
 
             // SQL API layer
             var dataSource = new GeoJsonZDataSource();

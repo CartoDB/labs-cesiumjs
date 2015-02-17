@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!-- Use correct character set. -->
         <meta charset="utf-8">
-        <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-        <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-        <title>Hello World!</title>
+        <title>CartoDB - Cesium example (simple)</title>
+        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/favicons/favicon.ico?1411985985" rel="shortcut icon" type="image/vnd.microsoft.icon" />
         <script src="Cesium/Cesium.js"></script>
         <style>
             @import url(Cesium/Widgets/widgets.css);
@@ -24,20 +22,10 @@
     <body>
         <div id="cesiumContainer"></div>
         <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script src="cesium-cartodb.min.js"></script>
         <script>
-            // New imagery provider with support for CartoDB's XYZ URLs
-            var CartoDBMapImageryProvider = Cesium.OpenStreetMapImageryProvider;
-            CartoDBMapImageryProvider.prototype.getCDNSubdomain = function (x, y) {  // Multi-WMS server selection
-                var subdomains = ['a', 'b', 'c', 'd'];
-                return subdomains[(x + y) % subdomains.length];
-            };
-            CartoDBMapImageryProvider.prototype.requestImage = function (x, y, level) {
-                var url = this._url.replace('{s}', this.getCDNSubdomain(x, y)).replace('{z}', level).replace('{x}', x).replace('{y}', y);
-                return Cesium.ImageryProvider.loadImage(this, url);
-            };
-
             // Basemap
-            var basemapProvider = new CartoDBMapImageryProvider({
+            var basemapProvider = new Cesium.CartoDBImageryProvider({
                 url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
             });
             var viewer = new Cesium.Viewer('cesiumContainer', {
@@ -45,11 +33,11 @@
                 baseLayerPicker: false
             });
 
-            // Tile data layer
+            // Tile data layer (circles)
             var layerData = {
                 user_name: 'dcarrion',
                 sublayers: [{
-                    sql: "SELECT * FROM twitter_aqualogy",
+                    sql: "SELECT * FROM twitter_test",
                     cartocss: '#layer { marker-fill: #F0F0F0; }'
                 }]
             };
@@ -58,12 +46,12 @@
                     console.log("error: ", err.errors.join('\n'));
                     return;
                 }
-                viewer.scene.imageryLayers.addImageryProvider(new CartoDBMapImageryProvider({
+                viewer.scene.imageryLayers.addImageryProvider(new Cesium.CartoDBImageryProvider({
                     url: tiles.tiles[0]
                 }));
             });
 
-            // SQL API layer
+            // SQL API layer (rendered by Cesium - bubbles)
             var dataSource = new Cesium.GeoJsonDataSource();
             viewer.dataSources.add(dataSource);
 
