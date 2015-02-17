@@ -56,7 +56,7 @@
             viewer.dataSources.add(dataSource);
 
             var sql = new cartodb.SQL({user: 'dcarrion', format: 'geoJSON'});
-            sql.execute("SELECT * FROM twitter_aqualogy")
+            sql.execute("SELECT * FROM twitter_test")
                     .done(function (data) {
                         dataSource.load(data)
                                 .then(function () {
