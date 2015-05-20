@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+        <title>CartoDB - Cesium example (simple)</title>
+        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/favicons/favicon.ico?1411985985" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+        <script src="Cesium/Cesium.js"></script>
+        <style>
+            @import url(Cesium/Widgets/widgets.css);
+
+            html, body, #cesiumContainer {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="cesiumContainer"></div>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script src="cesium-cartodb.min.js"></script>
+        <script>
+            // Basemap
+            var basemapProvider = new Cesium.CartoDBImageryProvider({
+                url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+            });
+            var viewer = new Cesium.Viewer('cesiumContainer', {
+                imageryProvider: basemapProvider,
+                baseLayerPicker: false,
+                timeline : false,
+                navigationHelpButton: false,
+                scene3DOnly: true,
+                fullscreenButton: false,
+                homeButton:false,
+                sceneModePicker:false,
+                geocoder:false
+            });
+
+            // Tile data layer (Ward offices)
+            var layerData = {
+                user_name: 'jsanz',
+                sublayers: [{
+                    sql: "SELECT * FROM ward_offices",
+                    cartocss: '#ward_offices {polygon-opacity: 0.7; line-color: #FFF; line-width: 0.5; line-opacity: 1; } #ward_offices[political_="ALP"] {polygon-fill: #A6CEE3; } #ward_offices[political_="IND"] {polygon-fill: #1F78B4; } #ward_offices[political_="LNP"] {polygon-fill: #B2DF8A; }'
+                }]
+            };
+            cartodb.Tiles.getTiles(layerData, function (tiles, err) {
+                if (tiles == null) {
+                    console.log("error: ", err.errors.join('\n'));
+                    return;
+                }
+                viewer.scene.imageryLayers.addImageryProvider(new Cesium.CartoDBImageryProvider({
+                    url: tiles.tiles[0]
+                }));
+            });
+
+            // SQL API layer (rendered by Cesium - bubbles)
+            var dataSource = new Cesium.GeoJsonDataSource();
+            viewer.dataSources.add(dataSource);
+
+            var sql = new cartodb.SQL({user: 'jsanz', format: 'geoJSON'});
+            sql.execute("SELECT cartodb_id, ST_Centroid(the_geom) the_geom, councillor, political_, ward, ward_code FROM jsanz.ward_offices")
+                    .done(function (data) {
+                        dataSource.load(data)
+                                .then(function () {
+                                })
+                    })
+                    .error(function (errors) {
+                        // errors contains a list of errors
+                        console.log("errors:" + errors);
+                    });
+
+
+            var entity = new Cesium.Entity('Title to put in the infobox');
+            entity.description = {
+                getValue : function() {
+                    return 'HTML to display in the infobox';
+                }
+            };
+            viewer.selectedEntity = entity
+
+
+
+            // zoom to a position
+            var ellipsoid = Cesium.Ellipsoid.WGS84;
+            var west = Cesium.Math.toRadians(152);
+            var south = Cesium.Math.toRadians(-29);
+            var east = Cesium.Math.toRadians(153.7);
+            var north = Cesium.Math.toRadians(-28);
+            var rotation = Cesium.Math.toRadians(30);
+
+            var extent = new Cesium.Rectangle(west, south, east, north);
+            viewer.camera.viewRectangle(extent, ellipsoid);
+            viewer.camera.lookUp(rotation);
+        </script>
+    </body>
+</html>
