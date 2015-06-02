@@ -62,6 +62,20 @@
                 padding: 4px;
                 border-radius: 4px;
             }
+
+
+            #legend {
+                margin: 5px;
+                padding: 2px 5px;
+                position: absolute;
+                background: rgba(42, 42, 42, 0.8);
+                border-radius: 4px;
+                bottom: 30px;
+                left: 0;
+                width: 200px;
+                height: 200px;
+            }
+
             #toolbar input {
                 vertical-align: middle;
                 padding-top: 2px;
@@ -85,257 +99,31 @@
         <div id="cesiumContainer" class="fullSize"></div>
         <div id="loadingOverlay"><h1>Loading...</h1></div>
         <div id="toolbar">
-        <table><tbody data-bind="foreach: layers">
-            <tr data-bind="css: { up: $parent.upLayer === $data, down: $parent.downLayer === $data }">
-                <td><input type="checkbox" data-bind="checked: show"></td>
-                <td>
-                    <span data-bind="text: name, visible: !$parent.isSelectableLayer($data)"></span>
-                    <select data-bind="visible: $parent.isSelectableLayer($data), options: $parent.baseLayers, optionsText: 'name', value: $parent.selectedLayer"></select>
-                </td>
-                <td>
-                    <input type="range" min="0" max="1" step="0.01" data-bind="value: alpha, valueUpdate: 'input'">
-                </td>
-                <td><button type="button" class="cesium-button" data-bind="click: function() { $parent.raise($data, $index()); }, visible: $parent.canRaise($index())">▲</button></td>
-                <td><button type="button" class="cesium-button" data-bind="click: function() { $parent.lower($data, $index()); }, visible: $parent.canLower($index())">▼</button></td>
-            </tr>
-        </tbody></table>
+            <table><tbody data-bind="foreach: layers">
+                <tr data-bind="css: { up: $parent.upLayer === $data, down: $parent.downLayer === $data }">
+                    <td><input type="checkbox" data-bind="checked: show"></td>
+                    <td>
+                        <span data-bind="text: name, visible: !$parent.isSelectableLayer($data)"></span>
+                        <select data-bind="visible: $parent.isSelectableLayer($data), options: $parent.baseLayers, optionsText: 'name', value: $parent.selectedLayer"></select>
+                    </td>
+                    <td>
+                        <input type="range" min="0" max="1" step="0.01" data-bind="value: alpha, valueUpdate: 'input'">
+                    </td>
+                    <td><button type="button" class="cesium-button" data-bind="click: function() { $parent.raise($data, $index()); }, visible: $parent.canRaise($index())">▲</button></td>
+                    <td><button type="button" class="cesium-button" data-bind="click: function() { $parent.lower($data, $index()); }, visible: $parent.canLower($index())">▼</button></td>
+                </tr>
+            </tbody></table>
         </div>
+        <!-- <div id="legend"></div> -->
 
 
         <script src="Cesium/Cesium.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
         <script src="cesium-cartodb.min.js"></script>
+        <script src="brisbane.js"></script>
         <script>
-            /*
-                code based on the layers manipulation Cesium example
-                http://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Imagery%20Layers%20Manipulation.html&label=Showcases
-            */
-            var viewer = new Cesium.Viewer('cesiumContainer', {
-                baseLayerPicker : false
-            });
-            var imageryLayers = viewer.imageryLayers;
-            var cesiumLayers = [];
-
-            var viewModel = {
-                layers : [],
-                baseLayers : [],
-                upLayer : null,
-                downLayer : null,
-                selectedLayer : null,
-                isSelectableLayer : function(layer) {
-                    return baseLayers.indexOf(layer) >= 0;
-                },
-                raise : function(layer, index) {
-                    imageryLayers.raise(layer);
-                    viewModel.upLayer = layer;
-                    viewModel.downLayer = viewModel.layers[Math.max(0, index - 1)];
-                    updateLayerList();
-                    window.setTimeout(function() { viewModel.upLayer = viewModel.downLayer = null; }, 10);
-                },
-                lower : function(layer, index) {
-                    imageryLayers.lower(layer);
-                    viewModel.upLayer = viewModel.layers[Math.min(viewModel.layers.length - 1, index + 1)];
-                    viewModel.downLayer = layer;
-                    updateLayerList();
-                    window.setTimeout(function() { viewModel.upLayer = viewModel.downLayer = null; }, 10);
-                },
-                canRaise : function(layerIndex) {
-                    return layerIndex > 0;
-                },
-                canLower : function(layerIndex) {
-                    return layerIndex >= 0 && layerIndex < imageryLayers.length - 1;
-                }
-            };
-            Cesium.knockout.track(viewModel);
-
-            var baseLayers = viewModel.baseLayers;
-
-            function setupLayers(tiles) {
-                addBaseLayerOption(
-                        'Bing Maps Aerial',
-                        undefined); // the current base layer
-                addBaseLayerOption(
-                        'CartoDB Light',
-                        new Cesium.CartoDBImageryProvider({
-                            url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
-                        }));
-                addBaseLayerOption(
-                        'CartoDB Dark',
-                        new Cesium.CartoDBImageryProvider({
-                            url: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-                        }));
-                addBaseLayerOption(
-                        'CartoDB Flat Blue',
-                        new Cesium.CartoDBImageryProvider({
-                            url: 'https://cartocdn_a.global.ssl.fastly.net/base-flatblue/{z}/{x}/{y}.png'
-                        }));
-                tiles.forEach(function(tileObj){
-                    // Create the additional layers
-                    addAdditionalLayerOption(
-                        tileObj.name,
-                        new Cesium.CartoDBImageryProvider({ url: tileObj.tiles.tiles[0] }),
-                        tileObj.alpha,
-                        tileObj.show
-                    );
-                });
-
-            }
-
-            function addBaseLayerOption(name, imageryProvider) {
-                var layer;
-                if (typeof imageryProvider === 'undefined') {
-                    layer = imageryLayers.get(0);
-                    viewModel.selectedLayer = layer;
-                } else {
-                    layer = new Cesium.ImageryLayer(imageryProvider);
-                }
-
-                layer.name = name;
-                baseLayers.push(layer);
-            }
-
-            function addAdditionalLayerOption(name, imageryProvider, alpha, show) {
-                var layer = imageryLayers.addImageryProvider(imageryProvider);
-                layer.alpha = Cesium.defaultValue(alpha, 0.5);
-                layer.show = Cesium.defaultValue(show, true);
-                layer.name = name;
-                cesiumLayers.push(layer);
-                Cesium.knockout.track(layer, ['alpha', 'show', 'name']);
-            }
-
-            function updateLayerList() {
-                var numLayers = imageryLayers.length;
-                viewModel.layers.splice(0, viewModel.layers.length);
-                for (var i = numLayers - 1; i >= 0; --i) {
-                    viewModel.layers.push(imageryLayers.get(i));
-                }
-            }
-
-            // Tile data layer (Ward offices)
-            // Instantiate this layers using a different process
-            var cdb_layers = [
-                {
-                    user_name: 'jsanz',
-                    sublayers: [{
-                        sql: 'SELECT * FROM ward_offices',
-                        cartocss: '#ward_offices {polygon-opacity: 0.7; line-color: #FFF; line-width: 0.5; line-opacity: 1; } #ward_offices[political_="ALP"] {polygon-fill: #A6CEE3; } #ward_offices[political_="IND"] {polygon-fill: #1F78B4; } #ward_offices[political_="LNP"] {polygon-fill: #B2DF8A; }'
-                        }]
-                },{
-                    user_name: 'jsanz',
-                    sublayers:[{
-                        sql: 'SELECT * FROM ne_10m_populated_places_simple_7',
-                        cartocss: '#ne_10m_populated_places_simple_7{marker-fill-opacity: 0.6; marker-line-color: #FFF; marker-line-width: 1.5; marker-line-opacity: 1; marker-width: 21.5; marker-fill: #FFFFCC; marker-allow-overlap: true; marker-comp-op: multiply; } #ne_10m_populated_places_simple_7 [ pop_max <= 35676000] {marker-fill: #0C2C84; } #ne_10m_populated_places_simple_7 [ pop_max <= 2769072] {marker-fill: #225EA8; } #ne_10m_populated_places_simple_7 [ pop_max <= 578470] {marker-fill: #1D91C0; } #ne_10m_populated_places_simple_7 [ pop_max <= 345604] {marker-fill: #41B6C4; } #ne_10m_populated_places_simple_7 [ pop_max <= 139843] {marker-fill: #7FCDBB; } #ne_10m_populated_places_simple_7 [ pop_max <= 42097] {marker-fill: #C7E9B4; } #ne_10m_populated_places_simple_7 [ pop_max <= 41316] {marker-fill: #FFFFCC; }'
-                    }]
-                },{
-                    user_name: 'jsanz',
-                    sublayers:[{
-                        sql: 'SELECT * FROM high_qualification_4326',
-                        cartocss: '#high_qualification_4326{polygon-fill: #FFFFCC; polygon-opacity: 0.8; line-color: #FFF; line-width: 0; line-opacity: 1; } #high_qualification_4326 [ bach_degre <= 51] {polygon-fill: #0C2C84; } #high_qualification_4326 [ bach_degre <= 37] {polygon-fill: #225EA8; } #high_qualification_4326 [ bach_degre <= 31] {polygon-fill: #1D91C0; } #high_qualification_4326 [ bach_degre <= 24] {polygon-fill: #41B6C4; } #high_qualification_4326 [ bach_degre <= 18] {polygon-fill: #7FCDBB; } #high_qualification_4326 [ bach_degre <= 12] {polygon-fill: #C7E9B4; } #high_qualification_4326 [ bach_degre <= 7] {polygon-fill: #FFFFCC; }'
-                    }]
-
-                }
-            ];
-
-  
-
-            cartodb.Tiles.getTiles(cdb_layers[0], function (tilesWard, err) {
-                cartodb.Tiles.getTiles(cdb_layers[1], function (tilesNEarth, err) {
-                    cartodb.Tiles.getTiles(cdb_layers[2], function (tilesQual, err) {
-
-                if (tilesWard == null || tilesNEarth == null) {
-                    console.log("error: ", err.errors.join('\n'));
-                    return;
-                }
-
-                setupLayers([
-                {
-                    name: 'Natural Earth Populated Places',
-                    tiles: tilesNEarth,
-                    alpha: 1,
-                    show: false
-                },
-                {
-                    name: 'Brisbane Ward Offices',
-                    tiles: tilesWard,
-                    alpha: 1,
-                    show: true
-                },
-                {
-                    name: 'Bachelor degree qualification',
-                    tiles: tilesQual,
-                    alpha: 1,
-                    show: false
-                }
-                ]);
-                updateLayerList();
-
-                //Bind the viewModel to the DOM elements of the UI that call for it.
-                var toolbar = document.getElementById('toolbar');
-                Cesium.knockout.applyBindings(viewModel, toolbar);
-
-                Cesium.knockout.getObservable(viewModel, 'selectedLayer').subscribe(function(baseLayer) {
-                    // Handle changes to the drop-down base layer selector.
-                    var activeLayerIndex = 0;
-                    var numLayers = viewModel.layers.length;
-                    for (var i = 0; i < numLayers; ++i) {
-                        if (viewModel.isSelectableLayer(viewModel.layers[i])) {
-                            activeLayerIndex = i;
-                            break;
-                        }
-                    }
-                    var activeLayer = viewModel.layers[activeLayerIndex];
-                    var show = activeLayer.show;
-                    var alpha = activeLayer.alpha;
-                    imageryLayers.remove(activeLayer, false);
-                    imageryLayers.add(baseLayer, numLayers - activeLayerIndex - 1);
-                    baseLayer.show = show;
-                    baseLayer.alpha = alpha;
-                    updateLayerList();
-                });
-
-                Cesium.knockout.getObservable(cesiumLayers[2],'show').subscribe(function(show){
-                    if (show){
-                        /*
-                        // SQL API layer (rendered by Cesium - bubbles)
-                        */
-                        var dataSource = new Cesium.GeoJsonDataSource();
-                        viewer.dataSources.add(dataSource);
-
-                        var sql = new cartodb.SQL({user: 'jsanz', format: 'geoJSON'});
-                        sql.execute('select cartodb_id, assoc_dip, bach_degre, higher_deg, post_grad, sla_code, sla_name, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'college\' as "marker-symbol" from high_qualification_4326 ')
-                                .done(function (data) {
-                                    dataSource.load(data)
-                                            .then(function () {
-                                            })
-                                })
-                                .error(function (errors) {
-                                    // errors contains a list of errors
-                                    console.log("errors:" + errors);
-                                });
-                    } else {
-                        viewer.dataSources.removeAll();
-                    }
-                })
-
-                // Select the CartoDB Light layer as base
-                viewModel.selectedLayer = viewModel.baseLayers[1];
-
-                // zoom to a position
-                var ellipsoid = Cesium.Ellipsoid.WGS84;
-                var west = Cesium.Math.toRadians(152);
-                var south = Cesium.Math.toRadians(-29);
-                var east = Cesium.Math.toRadians(153.7);
-                var north = Cesium.Math.toRadians(-28);
-                var rotation = Cesium.Math.toRadians(30);
-
-                var extent = new Cesium.Rectangle(west, south, east, north);
-                viewer.camera.viewRectangle(extent, ellipsoid);
-                viewer.camera.lookUp(rotation);
-
-        }); }); });
-
-
+            window.onload = main;
         </script>
     </body>
 </html>
