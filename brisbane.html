@@ -64,7 +64,7 @@
             }
 
 
-            #legend {
+            #camera {
                 margin: 5px;
                 padding: 2px 5px;
                 position: absolute;
@@ -73,7 +73,10 @@
                 bottom: 30px;
                 left: 0;
                 width: 200px;
-                height: 200px;
+                min-height: 160px;
+            }
+            #camera img{
+                max-width: 200px;
             }
 
             #toolbar input {
@@ -114,7 +117,9 @@
                 </tr>
             </tbody></table>
         </div>
-        <!-- <div id="legend"></div> -->
+        <div id="camera" style="display:none">
+            <p>Click on a camera :-)</p>
+        </div>
 
 
         <script src="Cesium/Cesium.js"></script>

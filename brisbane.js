@@ -25,9 +25,10 @@ function setupLayers(tiles) {
         // Create the additional layers
         addAdditionalLayerOption(
             tileObj.name,
-            new Cesium.CartoDBImageryProvider({ url: tileObj.tiles.tiles[0] }),
+            new Cesium.CartoDBImageryProvider({ url: tileObj.tiles.tiles[0]}),
             tileObj.alpha,
-            tileObj.show
+            tileObj.show,
+            tileObj.key
         );
     });
 
@@ -46,12 +47,12 @@ function addBaseLayerOption(name, imageryProvider) {
     baseLayers.push(layer);
 }
 
-function addAdditionalLayerOption(name, imageryProvider, alpha, show) {
+function addAdditionalLayerOption(name, imageryProvider, alpha, show, key) {
     var layer = imageryLayers.addImageryProvider(imageryProvider);
     layer.alpha = Cesium.defaultValue(alpha, 0.5);
     layer.show = Cesium.defaultValue(show, true);
     layer.name = name;
-    cesiumLayers.push(layer);
+    cesiumLayers[key] = layer;
     Cesium.knockout.track(layer, ['alpha', 'show', 'name']);
 }
 
@@ -112,32 +113,49 @@ function main(){
 
     // Tile data layer (Ward offices)
     // Instantiate this layers using a different process
-    var cdb_layers = [
-        {
+    var cdb_layers = {
+        /*
+        populated_places : {
             user_name: 'jsanz',
             sublayers:[{
                 sql: 'SELECT * FROM ne_10m_populated_places_simple_7',
                 "cartocss_version":"2.1.0",
                 cartocss: '#ne_10m_populated_places_simple_7{marker-fill-opacity: 0.6; marker-line-color: #FFF; marker-line-width: 1.5; marker-line-opacity: 1; marker-width: 14; marker-fill: #F1EEF6; marker-allow-overlap: true; marker-comp-op: darken; } #ne_10m_populated_places_simple_7 [ pop_max <= 35676000] {marker-fill: #91003F; } #ne_10m_populated_places_simple_7 [ pop_max <= 2769072] {marker-fill: #CE1256; } #ne_10m_populated_places_simple_7 [ pop_max <= 578470] {marker-fill: #E7298A; } #ne_10m_populated_places_simple_7 [ pop_max <= 345604] {marker-fill: #DF65B0; } #ne_10m_populated_places_simple_7 [ pop_max <= 139843] {marker-fill: #C994C7; } #ne_10m_populated_places_simple_7 [ pop_max <= 42097] {marker-fill: #D4B9DA; } #ne_10m_populated_places_simple_7 [ pop_max <= 41316] {marker-fill: #F1EEF6; }'
             }]
-        },
-        {
+        },*/
+        ward_offices : {
             user_name: 'jsanz',
             sublayers: [{
                 sql: 'SELECT * FROM ward_offices',
                 "cartocss_version":"2.1.0",
                 cartocss: '#ward_offices {polygon-opacity: 0.7; line-color: #FFF; line-width: 1.5; line-opacity: 1; } #ward_offices[political_="ALP"] {polygon-fill: #b20838; } #ward_offices[political_="IND"] {polygon-fill: #FFA300; } #ward_offices[political_="LNP"] {polygon-fill: #163260; }'
                 }]
-        },{
+        },
+        qualifications: {
             user_name: 'jsanz',
             sublayers:[{
                 sql: 'SELECT * FROM high_qualification_4326 where bach_degre is not null',
                 "cartocss_version":"2.1.0",
                 cartocss: '#high_qualification_4326{polygon-fill: #FFFFCC; polygon-opacity: 0.8; line-color: #FFF; line-width: 0; line-opacity: 1; } #high_qualification_4326 [ bach_degre <= 51] {polygon-fill: #0C2C84; } #high_qualification_4326 [ bach_degre <= 37] {polygon-fill: #225EA8; } #high_qualification_4326 [ bach_degre <= 31] {polygon-fill: #1D91C0; } #high_qualification_4326 [ bach_degre <= 24] {polygon-fill: #41B6C4; } #high_qualification_4326 [ bach_degre <= 18] {polygon-fill: #7FCDBB; } #high_qualification_4326 [ bach_degre <= 12] {polygon-fill: #C7E9B4; } #high_qualification_4326 [ bach_degre <= 7] {polygon-fill: #FFFFCC; }'
             }]
-
+        },
+        protected_areas : {
+            user_name: 'jsanz',
+            sublayers:[{
+                sql: 'SELECT nameabbrev,  st_union(st_buffer(the_geom_webmercator,40)) as the_geom_webmercator FROM jsanz.protected_areas GROUP BY nameabbrev',
+                "cartocss_version":"2.1.0",
+                cartocss: 'Map {buffer-size: 256;} #protected_areas {polygon-opacity: 0.9; polygon-fill: #229A00; line-color: darken(#229A00, 10%); line-width: 0.5; line-opacity: 1; } #protected_areas::labels[zoom>9] {text-name: [nameabbrev]; text-face-name: \'Lato Regular\'; text-size: 14; text-label-position-tolerance: 10; text-fill: #000; text-halo-fill: #FFF; text-halo-radius: 2; text-dy: 0; text-allow-overlap: false; text-placement: interior; text-placement-type: simple; }'
+            }]
+        },
+        roads: {
+            user_name: 'jsanz',
+            sublayers:[{
+                sql: 'SELECT * FROM jsanz.state_controlled_roads where carrway is not null ',
+                "cartocss_version":"2.1.0",
+                cartocss: '#state_controlled_roads{line-color: #B81609; line-width: 1.5; line-opacity: 1; [zoom > 8]{[carrway = \'2\']{line-width: 3; } [carrway = \'3\']{line-width: 3; } } }'
+            }]
         }
-    ];
+    };
 
     /*
         TODO how to make an asynchronous call to all the urls on the calls array?
@@ -166,32 +184,46 @@ function main(){
             }
         );*/
 
-    cartodb.Tiles.getTiles(cdb_layers[0], function (tilesNEarth, err) {
-        cartodb.Tiles.getTiles(cdb_layers[1], function (tilesWard, err) {
-            cartodb.Tiles.getTiles(cdb_layers[2], function (tilesQual, err) {
-        if (tilesWard == null || tilesNEarth == null) {
-            console.log("error: ", err.errors.join('\n'));
-            return;
-        }
+    //cartodb.Tiles.getTiles(cdb_layers['populated_places'], function (tilesNEarth, err) {
+        cartodb.Tiles.getTiles(cdb_layers['ward_offices'], function (tilesWard, err) {
+            cartodb.Tiles.getTiles(cdb_layers['qualifications'], function (tilesQual, err) {
+            cartodb.Tiles.getTiles(cdb_layers['protected_areas'], function (tilesProtected, err) {
+            cartodb.Tiles.getTiles(cdb_layers['roads'], function (tilesRoads, err) {
 
         setupLayers([
-            {
+            /*{
                 name: 'Natural Earth Populated Places',
                 tiles: tilesNEarth,
                 alpha: 1,
                 show: false
-            },
+            },*/
             {
                 name: 'Brisbane Ward Offices',
                 tiles: tilesWard,
                 alpha: 1,
-                show: false
+                show: false,
+                key: 'ward_offices'
             },
             {
-                name: 'Qualifications of Farmers',
+                name: 'Farmers qualifications',
                 tiles: tilesQual,
                 alpha: 1,
-                show: false
+                show: false,
+                key: 'qualifications'
+            },
+            {
+                name: 'Queensland protected areas',
+                tiles: tilesProtected,
+                alpha: 1,
+                show: false,
+                key: 'protected_areas'
+            },
+            {
+                name: 'Queensland state roads and cameras',
+                tiles: tilesRoads,
+                alpha: 1,
+                show: false,
+                key: 'roads'
             }
         ]);
 
@@ -253,29 +285,53 @@ function main(){
 
         };
 
-        // bachelor degrees
-        Cesium.knockout.getObservable(cesiumLayers[0],'show').subscribe(function(show){
+        // populated_places
+        /*Cesium.knockout.getObservable(cesiumLayers[0],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'populated',
                 sql : 'select adm0name as ADM0, adm1name as ADM1, name as title, pop_max as "Max Population", pop_min as "Min Population",  the_geom, \'#D4B9DA\' as "marker-color", \'small\' as "marker-size" from ne_10m_populated_places_simple_7'
             });
-        });
+        });*/
 
         
         // ward offices
-        Cesium.knockout.getObservable(cesiumLayers[1],'show').subscribe(function(show){
+        Cesium.knockout.getObservable(cesiumLayers['ward_offices'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'wards',
-                sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'town-hall\' as "marker-symbol" from ward_offices '
+                sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'town-hall\' as "marker-symbol", \'#169210\' as "marker-color" from ward_offices '
             });
         });
 
         // bachelor degrees
-        Cesium.knockout.getObservable(cesiumLayers[2],'show').subscribe(function(show){
+        Cesium.knockout.getObservable(cesiumLayers['qualifications'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'qualifications',
                 sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'college\' as "marker-symbol" from high_qualification_4326 where bach_degre is not null'
             });
+        });
+
+        // protected areas
+        Cesium.knockout.getObservable(cesiumLayers['protected_areas'],'show').subscribe(function(show){
+            showHideDataSource(show,{
+                key : 'protected_areas',
+                sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom, \'small\' as "marker-size", \'park\' as "marker-symbol", \'#A1F267\' as "marker-color" FROM jsanz.protected_areas GROUP BY estatename,legislated,qpws_reg,shire'
+            });
+        });
+
+        // roads
+        Cesium.knockout.getObservable(cesiumLayers['roads'],'show').subscribe(function(show){
+            showHideDataSource(show,{
+                key : 'roads',
+                sql : 'SELECT the_geom, angle, camera as title, region, url, \'camera\' as "marker-symbol", \'small\' as "marker-size", \'#F22F22\' as "marker-color" FROM jsanz.state_controlled_roads_traffic_cameras WHERE enabled is not null'
+            });
+
+            if (show){
+                $('#camera').show();
+                $('#camera p').show();
+            } else {
+                $('#camera img').remove();
+                $('#camera').hide();
+            }
         });
 
 
@@ -285,7 +341,14 @@ function main(){
         handler.setInputAction(function(click) {
             var pickedObject = scene.pick(click.position);
             if (Cesium.defined(pickedObject)) {
-                console.log(pickedObject.id.properties);
+                var properties = pickedObject.id.properties;
+                console.log(properties);
+
+                if (properties.url){
+                    $('#camera img').remove();
+                    $('#camera p').hide();
+                    $('#camera').append('<img src="' + properties.url +'">');
+                }
             }
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
@@ -307,5 +370,6 @@ function main(){
 
 
 
-    }); }); });
+    //}); 
+    }); }); }); }); // end getTiles
 }// end main
