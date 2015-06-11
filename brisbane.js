@@ -1,3 +1,5 @@
+var cartodbUser = 'solutions';
+
 /*
     code based on the layers manipulation Cesium example
     http://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Imagery%20Layers%20Manipulation.html&label=Showcases
@@ -114,17 +116,8 @@ function main(){
     // Tile data layer (Ward offices)
     // Instantiate this layers using a different process
     var cdb_layers = {
-        /*
-        populated_places : {
-            user_name: 'jsanz',
-            sublayers:[{
-                sql: 'SELECT * FROM ne_10m_populated_places_simple_7',
-                "cartocss_version":"2.1.0",
-                cartocss: '#ne_10m_populated_places_simple_7{marker-fill-opacity: 0.6; marker-line-color: #FFF; marker-line-width: 1.5; marker-line-opacity: 1; marker-width: 14; marker-fill: #F1EEF6; marker-allow-overlap: true; marker-comp-op: darken; } #ne_10m_populated_places_simple_7 [ pop_max <= 35676000] {marker-fill: #91003F; } #ne_10m_populated_places_simple_7 [ pop_max <= 2769072] {marker-fill: #CE1256; } #ne_10m_populated_places_simple_7 [ pop_max <= 578470] {marker-fill: #E7298A; } #ne_10m_populated_places_simple_7 [ pop_max <= 345604] {marker-fill: #DF65B0; } #ne_10m_populated_places_simple_7 [ pop_max <= 139843] {marker-fill: #C994C7; } #ne_10m_populated_places_simple_7 [ pop_max <= 42097] {marker-fill: #D4B9DA; } #ne_10m_populated_places_simple_7 [ pop_max <= 41316] {marker-fill: #F1EEF6; }'
-            }]
-        },*/
         ward_offices : {
-            user_name: 'jsanz',
+            user_name: cartodbUser,
             sublayers: [{
                 sql: 'SELECT * FROM ward_offices',
                 "cartocss_version":"2.1.0",
@@ -132,15 +125,15 @@ function main(){
                 }]
         },
         qualifications: {
-            user_name: 'jsanz',
+            user_name: cartodbUser,
             sublayers:[{
-                sql: 'SELECT * FROM high_qualification_4326 where bach_degre is not null',
+                sql: 'SELECT * FROM high_qualification where bach_degre is not null',
                 "cartocss_version":"2.1.0",
-                cartocss: '#high_qualification_4326{polygon-fill: #FFFFCC; polygon-opacity: 0.8; line-color: #FFF; line-width: 0; line-opacity: 1; } #high_qualification_4326 [ bach_degre <= 51] {polygon-fill: #0C2C84; } #high_qualification_4326 [ bach_degre <= 37] {polygon-fill: #225EA8; } #high_qualification_4326 [ bach_degre <= 31] {polygon-fill: #1D91C0; } #high_qualification_4326 [ bach_degre <= 24] {polygon-fill: #41B6C4; } #high_qualification_4326 [ bach_degre <= 18] {polygon-fill: #7FCDBB; } #high_qualification_4326 [ bach_degre <= 12] {polygon-fill: #C7E9B4; } #high_qualification_4326 [ bach_degre <= 7] {polygon-fill: #FFFFCC; }'
+                cartocss: '#high_qualification{polygon-fill: #FFFFCC; polygon-opacity: 0.8; line-color: #FFF; line-width: 0; line-opacity: 1; } #high_qualification [ bach_degre <= 51] {polygon-fill: #0C2C84; } #high_qualification [ bach_degre <= 37] {polygon-fill: #225EA8; } #high_qualification [ bach_degre <= 31] {polygon-fill: #1D91C0; } #high_qualification [ bach_degre <= 24] {polygon-fill: #41B6C4; } #high_qualification [ bach_degre <= 18] {polygon-fill: #7FCDBB; } #high_qualification [ bach_degre <= 12] {polygon-fill: #C7E9B4; } #high_qualification [ bach_degre <= 7] {polygon-fill: #FFFFCC; }'
             }]
         },
         protected_areas : {
-            user_name: 'jsanz',
+            user_name: cartodbUser,
             sublayers:[{
                 sql: 'SELECT nameabbrev,  st_union(st_buffer(the_geom_webmercator,40)) as the_geom_webmercator FROM jsanz.protected_areas GROUP BY nameabbrev',
                 "cartocss_version":"2.1.0",
@@ -148,7 +141,7 @@ function main(){
             }]
         },
         roads: {
-            user_name: 'jsanz',
+            user_name: cartodbUser,
             sublayers:[{
                 sql: 'SELECT * FROM jsanz.state_controlled_roads where carrway is not null ',
                 "cartocss_version":"2.1.0",
@@ -184,19 +177,13 @@ function main(){
             }
         );*/
 
-    //cartodb.Tiles.getTiles(cdb_layers['populated_places'], function (tilesNEarth, err) {
+        //cartodb.Tiles.getTiles(cdb_layers['populated_places'], function (tilesNEarth, err) {
         cartodb.Tiles.getTiles(cdb_layers['ward_offices'], function (tilesWard, err) {
             cartodb.Tiles.getTiles(cdb_layers['qualifications'], function (tilesQual, err) {
             cartodb.Tiles.getTiles(cdb_layers['protected_areas'], function (tilesProtected, err) {
             cartodb.Tiles.getTiles(cdb_layers['roads'], function (tilesRoads, err) {
 
         setupLayers([
-            /*{
-                name: 'Natural Earth Populated Places',
-                tiles: tilesNEarth,
-                alpha: 1,
-                show: false
-            },*/
             {
                 name: 'Brisbane Ward Offices',
                 tiles: tilesWard,
@@ -265,7 +252,7 @@ function main(){
                 viewer.dataSources.add(dataSource);
                 datasources[params.key] = dataSource;
 
-                var sql = new cartodb.SQL({user: 'jsanz', format: 'geoJSON'});
+                var sql = new cartodb.SQL({user: cartodbUser, format: 'geoJSON'});
                 sql.execute(params.sql)
                         .done(function (data) {
                             dataSource.load(data)
@@ -284,15 +271,6 @@ function main(){
             }
 
         };
-
-        // populated_places
-        /*Cesium.knockout.getObservable(cesiumLayers[0],'show').subscribe(function(show){
-            showHideDataSource(show,{
-                key : 'populated',
-                sql : 'select adm0name as ADM0, adm1name as ADM1, name as title, pop_max as "Max Population", pop_min as "Min Population",  the_geom, \'#D4B9DA\' as "marker-color", \'small\' as "marker-size" from ne_10m_populated_places_simple_7'
-            });
-        });*/
-
         
         // ward offices
         Cesium.knockout.getObservable(cesiumLayers['ward_offices'],'show').subscribe(function(show){
@@ -306,7 +284,7 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['qualifications'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'qualifications',
-                sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'college\' as "marker-symbol" from high_qualification_4326 where bach_degre is not null'
+                sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'college\' as "marker-symbol" from high_qualification where bach_degre is not null'
             });
         });
 
