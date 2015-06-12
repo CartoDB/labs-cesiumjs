@@ -255,6 +255,12 @@ function main(){
                 var sql = new cartodb.SQL({user: cartodbUser, format: 'geoJSON'});
                 sql.execute(params.sql)
                         .done(function (data) {
+                            if (params.style){
+                                data.features.forEach(function(feat){
+                                    $.extend(feat.properties,params.style);
+                                });
+                            }
+
                             dataSource.load(data)
                                     .then(function () {
                                     })
@@ -276,7 +282,12 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['ward_offices'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'wards',
-                sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'town-hall\' as "marker-symbol", \'#169210\' as "marker-color" from ward_offices '
+                sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom from ward_offices ',
+                style: {
+                    'marker-size': 'small',
+                    'marker-symbol': 'town-hall',
+                    'marker-color': '#169210'
+                }
             });
         });
 
@@ -284,7 +295,11 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['qualifications'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'qualifications',
-                sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom, \'small\' as "marker-size", \'college\' as "marker-symbol" from high_qualification where bach_degre is not null'
+                sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom from high_qualification where bach_degre is not null',
+                style: {
+                    'marker-size': 'small',
+                    'marker-symbol': 'college'
+                }
             });
         });
 
@@ -292,7 +307,12 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['protected_areas'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'protected_areas',
-                sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom, \'small\' as "marker-size", \'park\' as "marker-symbol", \'#A1F267\' as "marker-color" FROM protected_areas GROUP BY estatename,legislated,qpws_reg,shire'
+                sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom FROM protected_areas GROUP BY estatename,legislated,qpws_reg,shire',
+                style: {
+                    'marker-size': 'small',
+                    'marker-symbol': 'park',
+                    'marker-color': '#A1F267'
+                }
             });
         });
 
@@ -300,7 +320,12 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['roads'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'roads',
-                sql : 'SELECT the_geom, angle, camera as title, region, url, \'camera\' as "marker-symbol", \'small\' as "marker-size", \'#F22F22\' as "marker-color" FROM state_controlled_roads_traffic_cameras WHERE enabled is not null'
+                sql : 'SELECT the_geom, angle, camera as title, region, url FROM state_controlled_roads_traffic_cameras WHERE enabled is not null',
+                style: {
+                    'marker-size': 'small',
+                    'marker-symbol': 'camera',
+                    'marker-color': '#F22F22'
+                }
             });
 
             if (show){
