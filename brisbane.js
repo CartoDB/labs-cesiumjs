@@ -135,7 +135,7 @@ function main(){
         protected_areas : {
             user_name: cartodbUser,
             sublayers:[{
-                sql: 'SELECT nameabbrev,  st_union(st_buffer(the_geom_webmercator,40)) as the_geom_webmercator FROM jsanz.protected_areas GROUP BY nameabbrev',
+                sql: 'SELECT nameabbrev,  st_union(st_buffer(the_geom_webmercator,40)) as the_geom_webmercator FROM protected_areas GROUP BY nameabbrev',
                 "cartocss_version":"2.1.0",
                 cartocss: 'Map {buffer-size: 256;} #protected_areas {polygon-opacity: 0.9; polygon-fill: #229A00; line-color: darken(#229A00, 10%); line-width: 0.5; line-opacity: 1; } #protected_areas::labels[zoom>9] {text-name: [nameabbrev]; text-face-name: \'Lato Regular\'; text-size: 14; text-label-position-tolerance: 10; text-fill: #000; text-halo-fill: #FFF; text-halo-radius: 2; text-dy: 0; text-allow-overlap: false; text-placement: interior; text-placement-type: simple; }'
             }]
@@ -143,7 +143,7 @@ function main(){
         roads: {
             user_name: cartodbUser,
             sublayers:[{
-                sql: 'SELECT * FROM jsanz.state_controlled_roads where carrway is not null ',
+                sql: 'SELECT * FROM state_controlled_roads where carrway is not null ',
                 "cartocss_version":"2.1.0",
                 cartocss: '#state_controlled_roads{line-color: #B81609; line-width: 1.5; line-opacity: 1; [zoom > 8]{[carrway = \'2\']{line-width: 3; } [carrway = \'3\']{line-width: 3; } } }'
             }]
@@ -153,7 +153,7 @@ function main(){
     /*
         TODO how to make an asynchronous call to all the urls on the calls array?
         when.all from when.js seems to be the right tool but it can't be
-        loaded in this environment 
+        loaded in this environment
 
         var calls = [];
 
@@ -166,14 +166,14 @@ function main(){
                     "options":cdb_layer.sublayers[0]
                 }]
             };
-            calls.push('http://jsanz.cartodb.com/api/v1/map?stat_tag=API&config=' 
+            calls.push('http://jsanz.cartodb.com/api/v1/map?stat_tag=API&config='
                 + encodeURIComponent(JSON.stringify(obj)));
         });
 
         when.all(calls.map(function(call){return $.ajax(call)}))
         .done(
             function(){
-                debugger; 
+                debugger;
             }
         );*/
 
@@ -271,7 +271,7 @@ function main(){
             }
 
         };
-        
+
         // ward offices
         Cesium.knockout.getObservable(cesiumLayers['ward_offices'],'show').subscribe(function(show){
             showHideDataSource(show,{
@@ -292,7 +292,7 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['protected_areas'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'protected_areas',
-                sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom, \'small\' as "marker-size", \'park\' as "marker-symbol", \'#A1F267\' as "marker-color" FROM jsanz.protected_areas GROUP BY estatename,legislated,qpws_reg,shire'
+                sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom, \'small\' as "marker-size", \'park\' as "marker-symbol", \'#A1F267\' as "marker-color" FROM protected_areas GROUP BY estatename,legislated,qpws_reg,shire'
             });
         });
 
@@ -300,7 +300,7 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['roads'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'roads',
-                sql : 'SELECT the_geom, angle, camera as title, region, url, \'camera\' as "marker-symbol", \'small\' as "marker-size", \'#F22F22\' as "marker-color" FROM jsanz.state_controlled_roads_traffic_cameras WHERE enabled is not null'
+                sql : 'SELECT the_geom, angle, camera as title, region, url, \'camera\' as "marker-symbol", \'small\' as "marker-size", \'#F22F22\' as "marker-color" FROM state_controlled_roads_traffic_cameras WHERE enabled is not null'
             });
 
             if (show){
@@ -344,10 +344,10 @@ function main(){
 
         var extent = new Cesium.Rectangle(west, south, east, north);
         viewer.camera.viewRectangle(extent, ellipsoid);
-        viewer.camera.lookUp(rotation);  
+        viewer.camera.lookUp(rotation);
 
 
 
-    //}); 
+    //});
     }); }); }); }); // end getTiles
 }// end main
