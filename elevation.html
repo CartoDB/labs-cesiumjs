@@ -58,7 +58,10 @@
             var viewer = new Cesium.Viewer('cesiumContainer', {
                 terrainProvider : new Cesium.CesiumTerrainProvider({
                     url : '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
-                })
+                }),
+                baseLayerPicker: false,
+                timeline: false,
+                animation: false
             });
 
             // Set initial position and rotation

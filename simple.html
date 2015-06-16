@@ -28,9 +28,12 @@
             var basemapProvider = new Cesium.CartoDBImageryProvider({
                 url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
             });
+
             var viewer = new Cesium.Viewer('cesiumContainer', {
                 imageryProvider: basemapProvider,
-                baseLayerPicker: false
+                baseLayerPicker: false,
+                timeline: false,
+                animation: false
             });
 
             // Tile data layer (circles)
