@@ -5,68 +5,91 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
         <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/favicons/favicon.ico?1411985985" rel="shortcut icon" type="image/vnd.microsoft.icon" />
-        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/stylesheets/cartodb.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/stylesheets/public_map.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link href="css/guide.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="css/app.css" media="screen" rel="stylesheet" type="text/css" />
         <!--[if gt IE 8]><link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/stylesheets/fonts_ie.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
 
         <title>CesiumJS - CartoDB demos</title>
     </head>
     <body class="public-map">
-        <div class="cartodb-public-wrapper">
-            <header class="cartodb-public-header">
-                <div class="inner">
-                    <h1><a href="http://www.cartodb.com" class="logo" id="the_logo">CartoDB</a></h1>
-                </div>
-            </header>
+        <header class="Header">
+            <div class="inner clearfix">
+                <h1 class="u-left">
+                    <a href="http://www.cartodb.com" >
+                        <img src="https://cartodb-libs.global.ssl.fastly.net/cartodb.com/static/logos_full_cartodb_light.svg" height="40" />
+                    </a>
+                </h1>
+                <ul class="u-ilist u-right">
+                    <li><a href="http://www.cartodb.com/login">Login</a></li>
+                    <li class="u-lspace-xl">
+                          <p class="button button--blue">
+                            <a href="http://www.cartodb.com/signup">
+                              Sign up
+                            </a>
+                          </p>
+                    </li>
+                </ul>
             </div>
-        <div class="separator top"></div>
-        <div class="cartodb-map-data">
-            <div class="cartodb-info">
-                <div class="inner">
-                    <div class="details">
-                        <div class="content">
-                            <h1>CartoDB integration with Cesium (examples)</h1>
-                            <p class="description">These are a few basic examples of what can be achieved with <a href="http://cartodb.com">CartoDB</a> and <a href="http://cesiumjs.org">Cesium</a>.</p>
-                            <p class="description">Some of these examples use <a href="https://github.com/CartoDB/cesium-cartodb">CartoDB's Cesium plugin</a> to integrate CartoDB tile layers in Cesium.</p>
-                            <br />
-                            <p class="description">The code for these examples can be found on <a href="https://github.com/CartoDB/labs-cesiumjs">GitHub</a></p>
-                            <br />
-                            <br />
-                            <h1>Simple (<a target="_blank" href="simple.html">click here to view</a>)</h1>
-                            <p class="description">This example features Cesium with a CartoDB basemap, a CartoDB tile layer and a data layer (same data as the tile layer) drawn with Cesium.</p>
-                            <br />
-                            <img src="simple.png" />
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Tornados (<a target="_blank" href="tornados.html">click here to view</a>)</h1>
-                            <p class="description">This example shows a CartoDB basemap and a CartoDB tile layer.</p>
-                            <br />
-                            <img src="tornados.png" />
-                            <br />
-                            <br />
-                            <br />
-                            <h1>Elevation (<a target="_blank" href="elevation.html">click here to view</a>)</h1>
-                            <p class="description">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
-                            <br />
-                            <img src="elevation.png" />
+        </header>
+        <div class="Container Container--fixed">
+
+
+            <section class="block">
+                <h1 class="u-vspace-l"><strong>CartoDB integration with Cesium (examples)</strong></h1>
+                <p class="u-vspace-s">These are a few basic examples of what can be achieved with <a href="http://cartodb.com">CartoDB</a> and <a href="http://cesiumjs.org">Cesium</a>. Some of these examples use <a href="https://github.com/CartoDB/cesium-cartodb">CartoDB's Cesium plugin</a> to integrate CartoDB tile layers in Cesium.</p>
+                <p>The code for these examples can be found on <a href="https://github.com/CartoDB/labs-cesiumjs">GitHub</a></p>
+            </section>
+
+            <section class="block">
+                hola
+            </section>
+
+            <section class="block">
+                hola
+            </section>
+
+
+            <section class="block">
+                hola
+            </section>
+
+            <div class="cartodb-map-data">
+                <div class="cartodb-info">
+                        <div class="details">
+                            <div class="content">
+
+
+                                <h1>Simple (<a target="_blank" href="simple.html">click here to view</a>)</h1>
+                                <p class="description">This example features Cesium with a CartoDB basemap, a CartoDB tile layer and a data layer (same data as the tile layer) drawn with Cesium.</p>
+                                <br />
+                                <img src="simple.png" />
+                                <br />
+                                <br />
+                                <br />
+                                <h1>Tornados (<a target="_blank" href="tornados.html">click here to view</a>)</h1>
+                                <p class="description">This example shows a CartoDB basemap and a CartoDB tile layer.</p>
+                                <br />
+                                <img src="tornados.png" />
+                                <br />
+                                <br />
+                                <br />
+                                <h1>Elevation (<a target="_blank" href="elevation.html">click here to view</a>)</h1>
+                                <p class="description">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
+                                <br />
+                                <img src="elevation.png" />
+                            </div>
                         </div>
-                    </div>
                 </div>
-            </div>
-            <div class="cartodb-footer">
-                <div class="inner">
-                    <div class="copyright embed-left-col">
-                        <div class="content">
-                            &copy; 2015 CartoDB - <a href="https://cartodb.com/signup" title="Create your own maps with CartoDB">Create your own maps</a>
-                        </div>
-                    </div>
-                    <div class="terms embed-right-col">
-                        <div class="content">
-                            <a href="http://cartodb.com/terms" target="blank">Terms of Service</a> ·
-                            <a href="http://cartodb.com/privacy" target="blank">Privacy policy</a>
-                        </div>
-                    </div>
+                <div class="Footer clearfix">
+                    <p class="u-left">
+                         &copy; 2015 CartoDB - <a href="https://cartodb.com/signup" title="Create your own maps with CartoDB">Create your own maps</a>
+                    </p>
+                    <p class="u-right">
+                        <a href="http://cartodb.com/terms" target="blank">Terms of Service</a> ·
+                        <a href="http://cartodb.com/privacy" target="blank">Privacy policy</a>
+                    </p>
                 </div>
             </div>
         </div>

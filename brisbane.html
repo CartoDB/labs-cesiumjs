@@ -6,26 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
         <title>CartoDB - Cesium example (simple)</title>
         <link href="//cartodb-libs.global.ssl.fastly.net/cartodbui/assets/3.4.9/favicons/favicon.ico?1411985985" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link href="css/guide.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="Cesium/Widgets/widgets.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="Cesium/Widgets/lighter.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="css/app.css" media="screen" rel="stylesheet" type="text/css" />
+
         <style>
-            @import url(Cesium/Widgets/widgets.css);
 
-            @import url(Cesium/Widgets/lighter.css);
 
-            html {
-                height: 100%;
-            }
-
-            body {
-                background: #000;
-                color: #eee;
-                font-family: sans-serif;
-                font-size: 9pt;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
 
             .fullSize {
                 display: block;
@@ -54,14 +45,7 @@
                 margin-top: -0.5em;
             }
 
-            #toolbar {
-                margin: 5px;
-                padding: 2px 5px;
-                position: absolute;
-                background: rgba(42, 42, 42, 0.8);
-                padding: 4px;
-                border-radius: 4px;
-            }
+
 
 
             #camera {
@@ -79,23 +63,7 @@
                 max-width: 200px;
             }
 
-            #toolbar input {
-                vertical-align: middle;
-                padding-top: 2px;
-                padding-bottom: 2px;
-            }
-            #toolbar table tr {
-                transform: translateY(0);
-                transition: transform 0.4s ease-out;
-            }
-            #toolbar table tr.up {
-                transform: translateY(33px);
-                transition: none;
-            }
-            #toolbar table tr.down {
-                transform: translateY(-33px);
-                transition: none;
-            }
+            
         </style>
     </head>
     <body>
@@ -104,10 +72,12 @@
         <div id="toolbar">
             <table><tbody data-bind="foreach: layers">
                 <tr data-bind="css: { up: $parent.upLayer === $data, down: $parent.downLayer === $data }">
-                    <td><input type="checkbox" data-bind="checked: show"></td>
+                    <td><input type="checkbox" class="checkbox" data-bind="checked: show"></td>
                     <td>
                         <span data-bind="text: name, visible: !$parent.isSelectableLayer($data)"></span>
-                        <select data-bind="visible: $parent.isSelectableLayer($data), options: $parent.baseLayers, optionsText: 'name', value: $parent.selectedLayer"></select>
+                        <select data-bind="visible: $parent.isSelectableLayer($data), options: $parent.baseLayers, optionsText: 'name', value: $parent.selectedLayer">
+                            <option value="hide">Change your basemap</option>
+                        </select>
                     </td>
                     <td>
                         <input type="range" min="0" max="1" step="0.01" data-bind="value: alpha, valueUpdate: 'input'">

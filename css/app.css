@@ -1,0 +1,126 @@
+body {
+	font-family: 'Lato';
+}
+
+.Header {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background: rgba(255, 255, 255, .9);
+	border-bottom: 1px solid #e5e5e5;
+	padding: 20px 0;
+}
+
+.Container {
+	width: 940px;
+	margin: 0 auto;
+}
+.Container--fixed {
+	margin-top: 120px;
+}
+
+.Footer {
+	border-top: 1px solid #e5e5e5;
+	padding: 20px 0;
+	margin-top: 20px;
+}
+
+.block {
+	border-bottom: 1px dotted #e5e5e5;
+	padding: 60px 0;
+}
+/*
+.cesium-viewer-toolbar {
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  top: 20px;
+  right: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+}
+
+
+.cesium-viewer-toolbar svg {
+	display: none;
+}
+
+.cesium-timeline-icon16 {
+	background: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+  bottom: -8px !important;
+}
+
+.cesium-timeline-ticTiny,
+.cesium-timeline-ticSub,
+.cesium-timeline-ticMain,
+.cesium-timeline-needle,
+.cesium-timeline-trackContainer
+{
+	display: none;
+}
+
+.cesium-timeline-main {
+	border: 0;
+}
+.cesium-timeline-bar {
+  height: 4px;
+  overflow: visible;
+  position: relative;
+  border: 0;
+  background-color: #0090D7;
+  background-image: none;
+  border-radius: 50px;
+}
+
+.cesium-viewer-bottom {
+	top: 0;
+}
+
+.cesium-viewer-timelineContainer, .cesium-timeline-main, .cesium-timeline-bar {
+	overflow: visible
+}
+
+.cesium-timeline-ticLabel {
+	 top: -24px;
+  font-family: 'Lato';
+}
+
+*/
+#toolbar {
+    padding: 20px;
+    position: absolute;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+    top: 20px;
+    left: 20px;
+}
+#toolbar input {
+    vertical-align: middle;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+#toolbar table tr {
+    transform: translateY(0);
+    transition: transform 0.4s ease-out;
+}
+#toolbar table tr.up {
+    transform: translateY(33px);
+    transition: none;
+}
+#toolbar table tr.down {
+    transform: translateY(-33px);
+    transition: none;
+}
+
+
+#toolbar .select-styled { display: none; }
+#toolbar .select-options { display: none; }
+
+#toolbar tr:last-child .select-styled { display: block; }
+#toolbar tr:last-child .select-options { display: block; }
+
