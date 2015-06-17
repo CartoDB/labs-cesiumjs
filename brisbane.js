@@ -261,7 +261,7 @@ function main(){
                 key: 'protected_areas'
             },
             {
-                name: 'Queensland state roads and cameras',
+                name: 'Queensland roads and cameras',
                 tiles: tilesRoads,
                 alpha: 1,
                 show: false,
@@ -399,6 +399,13 @@ function main(){
         handler.setInputAction(function(click) {
             var pickedObject = scene.pick(click.position);
             if (Cesium.defined(pickedObject)) {
+                // Move the infowindow close to the element
+                $('.cesium-infoBox')
+                    .css('position','absolute')
+                    .css('top',click.position.y + 'px')
+                    .css('left',click.position.x + 'px');
+
+
                 var properties = pickedObject.id.properties;
                 console.log(properties);
 
@@ -407,9 +414,18 @@ function main(){
                     $('#camera p').hide();
                     $('#camera').append('<img src="' + properties.url +'">');
                 }
+            } else {
+                $('.cesium-infoBox').removeClass('cesium-infoBox-visible');
             }
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
+
+        handler.setInputAction(function(click) {
+            var pickedObject = scene.pick(click.position);
+            if (!Cesium.defined(pickedObject)) {
+                $('.cesium-infoBox').removeClass('cesium-infoBox-visible');
+            }
+        }, Cesium.ScreenSpaceEventType.LEFT_UP);
 
         // Select the CartoDB Light layer as base
         viewModel.selectedLayer = viewModel.baseLayers[1];
