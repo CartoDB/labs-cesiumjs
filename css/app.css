@@ -121,6 +121,129 @@ body {
 #toolbar .select-styled { display: none; }
 #toolbar .select-options { display: none; }
 
-#toolbar tr:last-child .select-styled { display: block; }
-#toolbar tr:last-child .select-options { display: block; }
 
+
+#toolbar .toolbarOptions li {
+  margin-bottom: 20px;
+}
+#toolbar .toolbarOptions li:last-child {
+  margin-bottom: 0;
+}
+
+#toolbar .toolbarOptions li:last-child .select-styled { display: block; }
+
+#toolbar .toolbarOptions li:last-child .toolbarOptions-actions {
+  display: none;
+}
+
+
+#toolbar .toolbarOptions li:nth-child(4) .cesium-button--down {
+  display: none;
+}
+
+
+#toolbar .toolbarOptions-text { width: 200px; }
+
+#toolbar .toolbarOptions .select-styled {
+  top: -8px;
+}
+
+
+
+input[type=range] {
+  -webkit-appearance: none;
+  margin: 10px 0;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #e5e5e5;
+  border-radius: 25px;
+}
+input[type=range]::-webkit-slider-thumb {
+  background: #FFFFFF;
+  border: 1px solid rgba(0,0,0,0.20);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.30);
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -10px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #0090D7;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: #e5e5e5;
+  border-radius: 25px;
+}
+input[type=range]::-moz-range-thumb {
+  background: #FFFFFF;
+  border: 1px solid rgba(0,0,0,0.20);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.30);
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.cesium-viewer-infoBoxContainer {
+  font-family: 'lato'
+}
+.cesium-infoBox {
+  background: #fff;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, .2);
+  border: 0;
+  border-radius: 4px;
+}
+.cesium-infoBox-title {
+  background: #333;
+  padding: 40px;
+  height: auto;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.cesium-infoBox-body {
+  padding: 0;
+  margin: 0 20px 20px 20px;
+}
+
+.cesium-infoBox-defaultTable {
+  color: #333;
+}
+.cesium-infoBox-defaultTable tr {
+  border-bottom: 1px solid #eee;
+}
+.cesium-infoBox-defaultTable tr:last-child {
+  border-bottom: 0;
+}
+.cesium-infoBox-defaultTable tr:nth-child(odd) {
+  background: #fff;
+}
+.cesium-infoBox-defaultTable tr:nth-child(even) {
+  background: #fff;
+}
+.cesium-infoBox-defaultTable th {
+  font-weight: normal;
+  padding: 0;
+  vertical-align: middle;
+  text-align: left;
+  font-weight: bold;
+}
+.cesium-infoBox-defaultTable td {
+  color: #666;
+  padding: 11px 0;
+}

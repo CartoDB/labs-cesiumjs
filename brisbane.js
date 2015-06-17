@@ -364,7 +364,7 @@ function main(){
                 key : 'protected_areas',
                 sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom FROM protected_areas GROUP BY estatename,legislated,qpws_reg,shire',
                 style: {
-                    'marker-size': 'small',
+                    'marker-size': 'medium',
                     'marker-symbol': 'park',
                     'marker-color': '#A1F267'
                 }
