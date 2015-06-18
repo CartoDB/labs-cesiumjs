@@ -294,7 +294,7 @@ button.cesium-infoBox-camera {
   box-shadow: 0 0 4px rgba(0, 0, 0, .2);
   top: 20px;
   right: 20px;
-  padding: 4px;
+  padding: 4px 8px;
 }
 .cesium-viewer-toolbar svg {
   display: none;
@@ -311,6 +311,7 @@ button.cesium-infoBox-camera {
   background-repeat: no-repeat;
   background-position: center center;
   border: 0;
+  margin: 0 4px 0 0 ;
 }
 
 .cesium-home-button:hover {
@@ -347,7 +348,7 @@ button.cesium-infoBox-camera {
   color: #666;
   font-family: 'Lato';
   margin-left: 10px;
-  margin-right: 30px;
+  margin-right: 22px;
   padding: 0;
   border: 0 !important;
   border-bottom: 1px solid #e5e5e5;
@@ -362,5 +363,61 @@ button.cesium-infoBox-camera {
   background: transparent;
   color: #333;
 
+}
+span.cesium-sceneModePicker-wrapper {
+  margin: 0;
+}
+
+.cesium-sceneModePicker-wrapper .cesium-sceneModePicker-button3D, .cesium-sceneModePicker-wrapper .cesium-sceneModePicker-buttonColumbusView, .cesium-sceneModePicker-wrapper .cesium-sceneModePicker-button2D {
+  margin: 0;
+}
+
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-button3D, 
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-button2D,
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-buttonColumbusView  {
+  background-color: transparent;
+  border: 0;
+}
+
+
+
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-button3D {
+  background-image: url(../images/map.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+} 
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-button2D {
+  background-image: url(../images/2D.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-buttonColumbusView  {
+  background-image: url(../images/columbus.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-dropDown-icon.cesium-sceneModePicker-visible {
+  background-color: #fff;
+  border: 0;
+  box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+}
+
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-dropDown-icon.cesium-sceneModePicker-visible[title="2D"] {
+  background-image: url(../images/2D.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50%;
+}
+
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-dropDown-icon.cesium-sceneModePicker-visible[title="3D"] {
+  background-image: url(../images/map.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.cesium-button.cesium-toolbar-button.cesium-sceneModePicker-dropDown-icon.cesium-sceneModePicker-visible[title="Columbus View"] {
+  background-image: url(../images/columbus.png);
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
