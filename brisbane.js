@@ -4,6 +4,70 @@ var cartodbUser = 'solutions';
     code based on the layers manipulation Cesium example
     http://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Imagery%20Layers%20Manipulation.html&label=Showcases
 */
+
+function styleBaseLayerCombo(viewModel){
+
+    $(".js-dropdown").click(function(e){
+      e.preventDefault();
+      var posX = $(this).position().left ,posY = $(this).position().top;
+
+      $(".Dropdown").toggleClass('is-active');
+
+      $(".Dropdown").css('left', (e.pageX)-130);
+      $(".Dropdown").css('top', (e.pageY)+20);
+    });
+
+    $('select').each(function(){
+        var $this = $(this), numberOfOptions = $(this).children('option').length;
+
+        $this.addClass('select-hidden');
+        $this.wrap('<div class="select"></div>');
+        $this.after('<div class="select-styled"></div>');
+
+        var $styledSelect = $this.next('div.select-styled');
+        $styledSelect.text($this.children('option').eq(0).text());
+
+        var $list = $('<ul />', {
+            'class': 'select-options'
+        }).insertAfter($styledSelect);
+
+        for (var i = 0; i < numberOfOptions; i++) {
+            $('<li />', {
+                text: $this.children('option').eq(i).text(),
+                rel: $this.children('option').eq(i).val()
+            }).appendTo($list);
+        }
+
+        var $listItems = $list.children('li');
+
+        $styledSelect.click(function(e) {
+            e.stopPropagation();
+            $('div.select-styled.active').each(function(){
+                $(this).removeClass('active').next('ul.select-options').hide();
+            });
+            $(this).toggleClass('active').next('ul.select-options').toggle();
+        });
+
+        $listItems.click(function(e) {
+            e.stopPropagation();
+            $styledSelect.text($(this).text()).removeClass('active');
+            $this.val($(this).attr('rel'));
+            $list.hide();
+            var layerName = $(this).text();
+            var layer = viewModel.baseLayers.filter(function(l){return l.name == layerName})
+            if (layer){
+                viewModel.selectedLayer = layer[0];
+            }
+            //console.log($this.val());
+        });
+
+        $(document).click(function() {
+            $styledSelect.removeClass('active');
+            $list.hide();
+        });
+    });
+}
+
 function setupLayers(tiles) {
     addBaseLayerOption(
             'Bing Maps Aerial',
@@ -33,62 +97,6 @@ function setupLayers(tiles) {
             tileObj.key
         );
     });
-
- $(".js-dropdown").click(function(e){
-      e.preventDefault();
-      var posX = $(this).position().left ,posY = $(this).position().top;
-
-      $(".Dropdown").toggleClass('is-active');
-
-      $(".Dropdown").css('left', (e.pageX)-130);
-      $(".Dropdown").css('top', (e.pageY)+20);
-    });
-
-    $('select').each(function(){
-        var $this = $(this), numberOfOptions = $(this).children('option').length;
-      
-        $this.addClass('select-hidden'); 
-        $this.wrap('<div class="select"></div>');
-        $this.after('<div class="select-styled"></div>');
-
-        var $styledSelect = $this.next('div.select-styled');
-        $styledSelect.text($this.children('option').eq(0).text());
-      
-        var $list = $('<ul />', {
-            'class': 'select-options'
-        }).insertAfter($styledSelect);
-      
-        for (var i = 0; i < numberOfOptions; i++) {
-            $('<li />', {
-                text: $this.children('option').eq(i).text(),
-                rel: $this.children('option').eq(i).val()
-            }).appendTo($list);
-        }
-      
-        var $listItems = $list.children('li');
-      
-        $styledSelect.click(function(e) {
-            e.stopPropagation();
-            $('div.select-styled.active').each(function(){
-                $(this).removeClass('active').next('ul.select-options').hide();
-            });
-            $(this).toggleClass('active').next('ul.select-options').toggle();
-        });
-      
-        $listItems.click(function(e) {
-            e.stopPropagation();
-            $styledSelect.text($(this).text()).removeClass('active');
-            $this.val($(this).attr('rel'));
-            $list.hide();
-            //console.log($this.val());
-        });
-      
-        $(document).click(function() {
-            $styledSelect.removeClass('active');
-            $list.hide();
-        });
-    });
-
 }
 
 function addBaseLayerOption(name, imageryProvider) {
@@ -309,21 +317,21 @@ function main(){
 
                 var sql = new cartodb.SQL({user: cartodbUser, format: 'geoJSON'});
                 sql.execute(params.sql)
-                        .done(function (data) {
-                            if (params.style){
-                                data.features.forEach(function(feat){
-                                    $.extend(feat.properties,params.style);
-                                });
-                            }
+                    .done(function (data) {
+                        if (params.style){
+                            data.features.forEach(function(feat){
+                                $.extend(feat.properties,params.style);
+                            });
+                        }
 
-                            dataSource.load(data)
-                                    .then(function () {
-                                    })
-                        })
-                        .error(function (errors) {
-                            // errors contains a list of errors
-                            console.log("errors:" + errors);
-                        });
+                        dataSource.load(data)
+                                .then(function () {
+                                })
+                    })
+                    .error(function (errors) {
+                        // errors contains a list of errors
+                        console.log("errors:" + errors);
+                    });
 
                 console.log(params.key + " layer activated");
             } else {
@@ -428,21 +436,21 @@ function main(){
         }, Cesium.ScreenSpaceEventType.LEFT_UP);
 
         // Select the CartoDB Light layer as base
-        viewModel.selectedLayer = viewModel.baseLayers[1];
+        // viewModel.selectedLayer = viewModel.baseLayers[1];
 
         // zoom to a position
         var ellipsoid = Cesium.Ellipsoid.WGS84;
-        var west = Cesium.Math.toRadians(152);
-        var south = Cesium.Math.toRadians(-29);
-        var east = Cesium.Math.toRadians(153.7);
-        var north = Cesium.Math.toRadians(-28);
-        var rotation = Cesium.Math.toRadians(30);
+        var west = Cesium.Math.toRadians(135);
+        var south = Cesium.Math.toRadians(-40);
+        var east = Cesium.Math.toRadians(145);
+        var north = Cesium.Math.toRadians(-15);
+        var rotation = Cesium.Math.toRadians(10);
 
         var extent = new Cesium.Rectangle(west, south, east, north);
         viewer.camera.viewRectangle(extent, ellipsoid);
         viewer.camera.lookUp(rotation);
 
-
+        //styleBaseLayerCombo(viewModel);
 
     //});
     }); }); }); }); // end getTiles
