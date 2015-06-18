@@ -90,14 +90,34 @@ body {
 }
 
 */
+
+p.small {
+  font-size: 11px;
+  color: #666;
+}
+.itm-media {
+  float:left;
+}
+.itm-body {
+  display: table;
+}
+
+.toolbar-info {
+  padding: 24px;
+  margin: -24px -24px 24px -24px;
+  max-width: 350px;
+}
+.toolbar-title {
+  font-size: 26px;
+}
 #toolbar {
-    padding: 20px;
-    position: absolute;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, .2);
-    top: 20px;
-    left: 20px;
+  padding: 24px;
+  position: fixed;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+  top: 0;
+  left: 0;
+  bottom: 0;
 }
 #toolbar input {
     vertical-align: middle;
@@ -124,10 +144,13 @@ body {
 
 
 #toolbar .toolbarOptions li {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e5e5;
 }
 #toolbar .toolbarOptions li:last-child {
-  margin-bottom: 0;
+  margin-top: 22px;
+  border-bottom: 0;
 }
 
 #toolbar .toolbarOptions li:last-child .select-styled { display: block; }
@@ -153,35 +176,36 @@ body {
 input[type=range] {
   -webkit-appearance: none;
   margin: 10px 0;
+  background: #fff;
 }
 input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 4px;
+  height: 2px;
   cursor: pointer;
   animate: 0.2s;
   background: #e5e5e5;
   border-radius: 25px;
 }
 input[type=range]::-webkit-slider-thumb {
-  background: #FFFFFF;
+  background: #fff;
   border: 1px solid rgba(0,0,0,0.20);
   box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.30);
-  height: 20px;
-  width: 20px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -10px;
+  margin-top: -5px;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: #0090D7;
 }
 input[type=range]::-moz-range-track {
   width: 100%;
-  height: 4px;
+  height: 2px;
   cursor: pointer;
   animate: 0.2s;
   background: #e5e5e5;
@@ -191,10 +215,12 @@ input[type=range]::-moz-range-thumb {
   background: #FFFFFF;
   border: 1px solid rgba(0,0,0,0.20);
   box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.30);
-  height: 20px;
-  width: 20px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
   cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
 }
 
 .cesium-viewer-infoBoxContainer {
@@ -260,4 +286,15 @@ button.cesium-infoBox-camera {
   border-radius: 3px;
   padding: 0;
   margin: 0 0 0 -11px;
+}
+
+.cesium-viewer-toolbar {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+  top: 20px;
+  right: 20px;
+}
+.cesium-viewer-toolbar svg {
+  display: none;
 }
