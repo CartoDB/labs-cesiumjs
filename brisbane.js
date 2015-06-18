@@ -315,6 +315,14 @@ function main(){
                 viewer.dataSources.add(dataSource);
                 datasources[params.key] = dataSource;
 
+                dataSource.loadingEvent.addEventListener(function(event,isLoading){
+                    if (isLoading){
+                        $('#loadingOverlay').show();
+                    } else {
+                        $('#loadingOverlay').hide();
+                    }
+                })
+
                 var sql = new cartodb.SQL({user: cartodbUser, format: 'geoJSON'});
                 sql.execute(params.sql)
                     .done(function (data) {
