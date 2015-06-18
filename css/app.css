@@ -342,6 +342,24 @@ button.cesium-infoBox-camera {
   box-shadow: 0 0 0 ;
 }
 
+.cesium-navigation-help-button {
+  background-image: url(../images/info.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: transparent;
+  box-shadow: 0 0 0 ;
+  border: 0;
+}
+
+.cesium-navigation-help-button:hover {
+  background-image: url(../images/info.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: transparent;
+  box-shadow: 0 0 0 ;
+  border: 0;
+}
+
 .cesium-viewer-geocoderContainer .cesium-geocoder-input {
   border: 0px;
   background-color: transparent;
