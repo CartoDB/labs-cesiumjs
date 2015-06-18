@@ -231,6 +231,7 @@ input[type=range]::-moz-range-thumb {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, .2);
   border: 0;
   border-radius: 4px;
+  max-width: 300px;
 }
 .cesium-infoBox-title {
   background: #333;
@@ -271,7 +272,7 @@ input[type=range]::-moz-range-thumb {
 }
 .cesium-infoBox-defaultTable td {
   color: #666;
-  padding: 11px 0;
+  padding: 11px;
 }
 
 button.cesium-infoBox-camera {
