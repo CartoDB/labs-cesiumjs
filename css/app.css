@@ -546,3 +546,19 @@ select {
   100%{ -webkit-transform: rotate(360deg); tranform: rotate(360deg);}
 }
 
+
+#camera {
+  margin: 5px;
+  position: absolute;
+  background: rgba(42, 42, 42, 0.8);
+  border-radius: 4px;
+  /* bottom: 30px; */
+  top: 100px;
+  left: 360px;
+  bottom: auto;
+  box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+}
+#camera img{
+  max-width: 200px;
+  border-radius: 4px;
+}
