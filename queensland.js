@@ -316,7 +316,8 @@ function main(){
                 datasources[params.key] = dataSource;
 
                 dataSource.loadingEvent.addEventListener(function(event,isLoading){
-                    if (isLoading){
+                    var status = $('#loadingOverlay').css('display');
+                    if (isLoading && status === 'none'){
                         $('#loadingOverlay').show();
                     } else {
                         $('#loadingOverlay').hide();
