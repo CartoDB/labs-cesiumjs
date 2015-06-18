@@ -33,7 +33,7 @@ body {
 	padding: 60px 0;
 }
 
-.Container .block:last-child {
+.block--noborder {
   border-bottom: 0;
   margin-bottom: 120px;
 }

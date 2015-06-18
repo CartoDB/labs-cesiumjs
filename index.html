@@ -18,7 +18,10 @@
             <div class="inner clearfix">
                 <h1 class="u-left">
                     <a href="http://www.cartodb.com" >
-                        <img src="https://cartodb-libs.global.ssl.fastly.net/cartodb.com/static/logos_full_cartodb_light.svg" height="40" />
+                        <img src="https://cartodb-libs.global.ssl.fastly.net/cartodb.com/static/logos_full_cartodb_light.svg" class="u-iblock u-malign" height="40" />
+                        <span class="color-medium u-iblock u-malign u-lspace-xs" id="js-infoHeader">
+                            /&nbsp;Integration with Celsium
+                        </span>
                     </a>
                 </h1>
                 <ul class="u-ilist u-right">
@@ -34,8 +37,6 @@
             </div>
         </header>
         <div class="Container Container--fixed">
-
-
             <section class="block">
                 <h1 class="u-vspace-l"><strong>CartoDB integration with Cesium (examples)</strong></h1>
                 <p class="u-vspace-s">These are a few basic examples of what can be achieved with <a href="http://cartodb.com">CartoDB</a> and <a href="http://cesiumjs.org">Cesium</a>. Some of these examples use <a href="https://github.com/CartoDB/cesium-cartodb">CartoDB's Cesium plugin</a> to integrate CartoDB tile layers in Cesium.</p>
@@ -59,10 +60,9 @@
                               <div class="Browser-media">
                                 <div class="Browser-inner u-pr">
                                   <div class="Browser-bg"></div>
-                                  <!--
-                                   <img src="tornados.png" width="620" />
-                               -->
-                                    <img src="https://cartodb-libs.global.ssl.fastly.net/cartodb.com/assets/img/layout/industries/banking-and-finance/use-case-bbva.f91679a4.jpg" class="no-full" width="620" height="363" alt="BBVA">
+                                   <a href="simple.html">
+                                        <img src="images/simple.jpg" class="no-full" width="620" height="363" alt="Simple example">
+                                    </a>
                                 </div>
                               </div>
                             </div>
@@ -71,7 +71,7 @@
                             <h1 class="u-vspace-l">Simple</h1>
                             <p class="description u-vspace-xl">This example features Cesium with a CartoDB basemap, a CartoDB tile layer and a data layer (same data as the tile layer) drawn with Cesium.</p>
                             <p class="button button--outline u-txt-left">
-                                <a class="u-txt-center" href="tornados.html">
+                                <a class="u-txt-center" href="simple.html">
                                   View example
                                 </a>
                             </p>
@@ -87,7 +87,7 @@
                             <h1 class="u-vspace-l">Tornados</h1>
                             <p class="description u-vspace-xl">This example shows a CartoDB basemap and a CartoDB tile layer.</p>
                             <p class="button button--outline u-txt-left">
-                                <a class="u-txt-center" href="simple.html">
+                                <a class="u-txt-center" href="tornados.html">
                                   View example
                                 </a>
                             </p>
@@ -110,7 +110,9 @@
                                   <!--
                                    <img src="simple.png" width="620" />
                                -->
-                                    <img src="https://cartodb-libs.global.ssl.fastly.net/cartodb.com/assets/img/layout/industries/banking-and-finance/use-case-bbva.f91679a4.jpg" class="no-full" width="620" height="363" alt="BBVA">
+                                   <a href="tornados.html">
+                                        <img src="images/tornados.jpg" class="no-full" width="620" height="363" alt="Tornados example">
+                                    </a>
                                 </div>
                               </div>
                             </div>
@@ -119,18 +121,85 @@
                 </div>
             </section>
 
-
             <section class="block">
-                <h1>Elevation (<a target="_blank" href="elevation.html">click here to view</a>)</h1>
-                <p class="description">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
-                <img src="elevation.png" />
+                <div class="Grid">
+                    <div class="Grid-inner Grid-inner--vcenter">
+                        <div class="Grid-cell Grid-cell--col7 Grid-cell--col6--tablet Grid-cell--col12--mobile Section-offset--left">
+                            <div class="Browser u-iblock">
+                              <ul class="Browser-actions u-ilist">
+                                <li class="Browser-actionsItem"></li>
+                                <li class="Browser-actionsItem"></li>
+                                <li class="Browser-actionsItem"></li>
+                              </ul>
+                              <div class="Browser-bar">
+                                <div class="Browser-address"></div>
+                              </div>
+
+                              <div class="Browser-media">
+                                <div class="Browser-inner u-pr">
+                                  <div class="Browser-bg"></div>
+                                  <!--
+                                <img src="elevation.png" />
+                               -->
+                                   <a href="elevation.html">
+                                        <img src="images/elevation.jpg" class="no-full" width="620" height="363" alt="Elevation example">
+                                    </a>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="Grid-cell Grid-cell--col5 Grid-cell--col6--tablet Grid-cell--col12--mobile u-tspace-xxl">
+                            <h1 class="u-vspace-l">Elevation</h1>
+                            <p class="description u-vspace-xl">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
+                            <p class="button button--outline u-txt-left">
+                                <a class="u-txt-center" href="elevation.html">
+                                  View example
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            <section class="block block--noborder">
+                <div class="Grid">
+                    <div class="Grid-inner Grid-inner--vcenter">
+                        <div class="Grid-cell Grid-cell--col5 Grid-cell--col6--tablet Grid-cell--col12--mobile u-tspace-xxl">
+                            <h1 class="u-vspace-l">Queensland</h1>
+                            <p class="description u-vspace-xl">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
+                            <p class="button button--outline u-txt-left">
+                                <a class="u-txt-center" href="queensland.html">
+                                  View example
+                                </a>
+                            </p>
+                        </div>
 
-            <section class="block">
-                <h1>Queensland (<a target="_blank" href="queensland.html">click here to view</a>)</h1>
-                <p class="description">This example shows a data layer from CartoDB rendered with Cesium. The data table has an extra column for elevation. which is used to set the height of the vertical lines.</p>
-                <img src="elevation.png" />
+                        <div class="Grid-cell Grid-cell--col7 Grid-cell--col6--tablet Grid-cell--col12--mobile Section-offset--right">
+                            <div class="Browser u-iblock">
+                              <ul class="Browser-actions u-ilist">
+                                <li class="Browser-actionsItem"></li>
+                                <li class="Browser-actionsItem"></li>
+                                <li class="Browser-actionsItem"></li>
+                              </ul>
+                              <div class="Browser-bar">
+                                <div class="Browser-address"></div>
+                              </div>
+
+                              <div class="Browser-media">
+                                <div class="Browser-inner u-pr">
+                                  <div class="Browser-bg"></div>
+                                  <!--
+                                   <img src="simple.png" width="620" />
+                               -->
+                                    <a href="queensland.html">
+                                        <img src="images/queensland.jpg" class="no-full" width="620" height="363" alt="Queensland example">
+                                    </a>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <div class="Footer clearfix">
@@ -144,5 +213,11 @@
             </div>
 
         </div>
+
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+            });
+        </script>
     </body>
 </html>
