@@ -398,9 +398,7 @@ function main(){
                 key : 'roads',
                 sql : 'SELECT the_geom, angle, camera as title, region, url FROM state_controlled_roads_traffic_cameras WHERE enabled is not null',
                 style: {
-                    'marker-size': 'small',
-                    'marker-symbol': 'camera',
-                    'marker-color': '#F22F22'
+                    'billboard' : 'images/pin-camera.png'
                 }
             });
 
