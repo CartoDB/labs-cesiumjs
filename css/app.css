@@ -107,7 +107,8 @@ p.small {
   float:left;
 }
 .itm-body {
-  display: table;
+  display: block;
+  overflow: hidden;
 }
 
 .toolbar-info {
@@ -125,7 +126,7 @@ p.small {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 300px;
+  width: 380px;
 }
 #toolbar input {
     vertical-align: middle;
@@ -160,6 +161,76 @@ p.small {
   margin-top: 22px;
   border-bottom: 0;
 }
+
+.toolbarOptions-actions {
+  right: 0;
+  top: 0;
+}
+
+.toolbarOptions-actions .cesium-button {
+  margin: 0;
+  padding: 6px 8px;
+  margin: 0;
+  padding: 6px 8px;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 2px solid #e5e5e5;
+  display: inline-block;
+  text-indent: -9000px;
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+  .toolbarOptions-actions .cesium-button:before {
+    content:"";
+    width: 5px;
+    height: 2px;
+    background: #666;
+    position: absolute;
+    top: 13px;
+    right: 9px;
+    border-radius: 4px;
+    transform: rotate(45deg);
+
+  }
+  .toolbarOptions-actions .cesium-button:after {
+    content:"";
+    width: 5px;
+    height: 2px;
+    background: #666;
+    position: absolute;
+    top: 13px;
+    right: 12px;
+    border-radius: 4px;
+    transform: rotate(-45deg);
+  }
+
+
+  .toolbarOptions-actions .cesium-button.cesium-button--down:before {
+    content:"";
+    width: 5px;
+    height: 2px;
+    background: #666;
+    position: absolute;
+    top: 13px;
+    right: 9px;
+    border-radius: 4px;
+    transform: rotate(-45deg);
+  }
+  .toolbarOptions-actions .cesium-button.cesium-button--down:after {
+    content:"";
+    width: 5px;
+    height: 2px;
+    background: #666;
+    position: absolute;
+    top: 13px;
+    right: 12px;
+    border-radius: 4px;
+    transform: rotate(45deg);
+
+  }
+
 
 #toolbar .toolbarOptions li:last-child .select-styled { display: block; }
 
@@ -479,7 +550,6 @@ select {
   font-family: 'Lato';
   display: block;
   width: 100%;
-  margin-top: -9px;
   margin-bottom: 9px;
 }
   .select-container {
