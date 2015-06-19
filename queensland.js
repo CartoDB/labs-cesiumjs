@@ -190,7 +190,7 @@ function main(){
         qualifications: {
             user_name: cartodbUser,
             sublayers:[{
-                sql: 'SELECT * FROM high_qualification where bach_degre is not null',
+                sql: 'SELECT a.* FROM solutions.high_qualification a, solutions.qld_border b WHERE ST_Intersects(ST_Centroid(a.the_geom), b.the_geom)',
                 "cartocss_version":"2.1.0",
                 cartocss: '#high_qualification{polygon-fill: #FFFFCC; polygon-opacity: 0.8; line-color: #FFF; line-width: 0; line-opacity: 1; } #high_qualification [ bach_degre <= 51] {polygon-fill: #0C2C84; } #high_qualification [ bach_degre <= 37] {polygon-fill: #225EA8; } #high_qualification [ bach_degre <= 31] {polygon-fill: #1D91C0; } #high_qualification [ bach_degre <= 24] {polygon-fill: #41B6C4; } #high_qualification [ bach_degre <= 18] {polygon-fill: #7FCDBB; } #high_qualification [ bach_degre <= 12] {polygon-fill: #C7E9B4; } #high_qualification [ bach_degre <= 7] {polygon-fill: #FFFFCC; }'
             }]
@@ -371,7 +371,7 @@ function main(){
         Cesium.knockout.getObservable(cesiumLayers['qualifications'],'show').subscribe(function(show){
             showHideDataSource(show,{
                 key : 'qualifications',
-                sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom from high_qualification where bach_degre is not null',
+                sql : 'select a.bach_degre as "Bachelors", a.higher_deg as "High Ed", a.post_grad as "Post Grad", a.sla_name as title, st_centroid(a.the_geom) as the_geom from high_qualification a, qld_border b where ST_Intersects(ST_Centroid(a.the_geom), b.the_geom)',
                 style: {
                     'billboard' : 'images/pin-college.png'
                 }
