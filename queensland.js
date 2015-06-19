@@ -270,14 +270,14 @@ function main(){
                         }
 
                         dataSource.load(data)
-                                .then(function () {
-                                    if (params.style.billboard){
-                                        dataSource.entities.entities.forEach(function(e){
-                                            e.billboard.image.setValue(params.style.billboard)
-                                        })
-                                    }
+                            .then(function () {
+                                if (params.style.billboard){
+                                    dataSource.entities.entities.forEach(function(e){
+                                        e.billboard.image.setValue(params.style.billboard)
+                                    })
+                                }
 
-                                })
+                            })
                     })
                     .error(function (errors) {
                         // errors contains a list of errors
@@ -378,9 +378,6 @@ function main(){
                 $('.cesium-infoBox').removeClass('cesium-infoBox-visible');
             }
         }, Cesium.ScreenSpaceEventType.LEFT_UP);
-
-        // Select the CartoDB Light layer as base
-        // viewModel.selectedLayer = viewModel.baseLayers[1];
 
         // zoom to a position
         var ellipsoid = Cesium.Ellipsoid.WGS84;
