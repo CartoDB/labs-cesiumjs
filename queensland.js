@@ -362,7 +362,7 @@ function main(){
                 key : 'wards',
                 sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom from ward_offices ',
                 style: {
-                    'billboard' : 'images/saleiva.png'
+                    'billboard' : 'images/pin-council.png'
                 }
             });
         });
@@ -373,8 +373,7 @@ function main(){
                 key : 'qualifications',
                 sql : 'select bach_degre as "Bachelors", higher_deg as "High Ed", post_grad as "Post Grad", sla_name as title, st_centroid(the_geom) as the_geom from high_qualification where bach_degre is not null',
                 style: {
-                    'marker-size': 'small',
-                    'marker-symbol': 'college'
+                    'billboard' : 'images/pin-college.png'
                 }
             });
         });
@@ -385,9 +384,7 @@ function main(){
                 key : 'protected_areas',
                 sql : 'SELECT estatename as title, legislated, qpws_reg as region, shire, st_pointonsurface(st_union(the_geom)) as the_geom FROM protected_areas GROUP BY estatename,legislated,qpws_reg,shire',
                 style: {
-                    'marker-size': 'medium',
-                    'marker-symbol': 'park',
-                    'marker-color': '#A1F267'
+                    'billboard' : 'images/pin-tree.png'
                 }
             });
         });
