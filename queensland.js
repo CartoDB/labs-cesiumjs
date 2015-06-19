@@ -327,7 +327,7 @@ function main(){
                 var sql = new cartodb.SQL({user: cartodbUser, format: 'geoJSON'});
                 sql.execute(params.sql)
                     .done(function (data) {
-                        if (params.style){
+                        if (params.style['marker-symbol']){
                             data.features.forEach(function(feat){
                                 $.extend(feat.properties,params.style);
                             });
@@ -335,6 +335,12 @@ function main(){
 
                         dataSource.load(data)
                                 .then(function () {
+                                    if (params.style.billboard){
+                                        dataSource.entities.entities.forEach(function(e){
+                                            e.billboard.image.setValue(params.style.billboard)
+                                        })
+                                    }
+
                                 })
                     })
                     .error(function (errors) {
@@ -356,9 +362,7 @@ function main(){
                 key : 'wards',
                 sql : 'select councillor as "Councillor", political_ as "Party", ward as title, st_centroid(the_geom) as the_geom from ward_offices ',
                 style: {
-                    'marker-size': 'small',
-                    'marker-symbol': 'town-hall',
-                    'marker-color': '#169210'
+                    'billboard' : 'images/saleiva.png'
                 }
             });
         });
