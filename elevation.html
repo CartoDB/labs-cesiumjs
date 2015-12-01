@@ -64,12 +64,17 @@
 
             var viewer = new Cesium.Viewer('cesiumContainer', {
                 terrainProvider : new Cesium.CesiumTerrainProvider({
-                    url : '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
+                    url : '//assets.agi.com/stk-terrain/world',
+                    requestVertexNormals: true
                 }),
                 baseLayerPicker: false,
                 timeline: false,
                 animation: false
             });
+
+            viewer.scene.globe.enableLighting = true;
+
+
 
             // Set initial position and rotation
             var ellipsoid = Cesium.Ellipsoid.WGS84;
