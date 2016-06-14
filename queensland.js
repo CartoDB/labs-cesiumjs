@@ -1,5 +1,7 @@
 var cartodbUser = 'solutions';
 
+Cesium.BingMapsApi.defaultKey = 'AvpJKQgK8f4xjkNrV3GokGh1TtL5zlxAyeLpxpvXZPZrcFgJZwuWSecC7z_vB9TU';
+
 /*
     code based on the layers manipulation Cesium example
     http://cesiumjs.org/Cesium/Apps/Sandcastle/index.html?src=Imagery%20Layers%20Manipulation.html&label=Showcases

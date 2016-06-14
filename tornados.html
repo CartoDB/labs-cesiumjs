@@ -21,7 +21,7 @@
     </head>
     <body>
         <div id="cesiumContainer"></div>
-        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.core.js"></script>
         <script src="cesium-cartodb.min.js"></script>
         <script>
             // Basemap
@@ -43,10 +43,10 @@
 
             // Tile data layer
             var layerData = {
-                user_name: 'dcarrion',
+                user_name: 'cartotraining',
                 sublayers: [{
-                    sql: "SELECT * FROM tornados",
-                    cartocss: '#tornados{ marker-fill: #FFCC00; marker-width: 10; marker-line-color: #FFF; marker-line-width: 1.5; marker-line-opacity: 1; marker-fill-opacity: 0.9; marker-comp-op: multiply; marker-type: ellipse; marker-placement: point; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest;}'
+                    sql: "SELECT * FROM tornado",
+                    cartocss: '#tornados{ marker-fill: #FFCC00; marker-width: 8; marker-line-color: #FFF; marker-line-width: 1.5; marker-line-opacity: 1; marker-fill-opacity: 0.9; marker-comp-op: multiply; marker-type: ellipse; marker-placement: point; marker-allow-overlap: true; marker-clip: false; marker-multi-policy: largest;}'
                 }]
             };
             cartodb.Tiles.getTiles(layerData, function (tiles, err) {

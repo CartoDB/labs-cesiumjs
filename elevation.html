@@ -28,8 +28,10 @@
     </head>
     <body>
         <div id="cesiumContainer"></div>
-        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.core.js"></script>
         <script>
+            Cesium.BingMapsApi.defaultKey = 'AvpJKQgK8f4xjkNrV3GokGh1TtL5zlxAyeLpxpvXZPZrcFgJZwuWSecC7z_vB9TU';
+
             // New datasource which uses geoJSON from SQL for x, y and column "ele" for z.
             var GeoJsonZDataSource = Cesium.GeoJsonDataSource;
             GeoJsonZDataSource.prototype.load = function (data) {
@@ -92,8 +94,8 @@
             var dataSource = new GeoJsonZDataSource();
             viewer.dataSources.add(dataSource);
 
-            var sql = new cartodb.SQL({user: 'dcarrion', format: 'geoJSON'});
-            sql.execute("SELECT the_geom, ele FROM cesium_z")
+            var sql = new cartodb.SQL({user: 'cartotraining', format: 'geoJSON'});
+            sql.execute("SELECT the_geom,ele FROM elevation_cesium")
                     .done(function (data) {
                         dataSource.load(data);
                     })

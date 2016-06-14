@@ -26,7 +26,7 @@
     </head>
     <body>
         <div id="cesiumContainer"></div>
-        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.core.js"></script>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.core.js"></script>
         <script src="cesium-cartodb.min.js"></script>
         <script>
             // Basemap
@@ -38,16 +38,16 @@
                 imageryProvider: basemapProvider,
                 baseLayerPicker: false,
                 timeline: false,
-                animation: false
+                animation: false,
+                geocoder: false
             });
 
             // Tile data layer (circles)
             var layerData = {
-                user_name: 'dcarrion',
+                user_name: 'cartotraining',
                 sublayers: [{
-                    sql: "SELECT * FROM twitter_test",
-                    cartocss: '#layer { marker-fill: #F0F0F0; }'
-                }]
+                    sql: "SELECT * FROM ne_10m_populated_places_simple WHERE adm0_a3 like 'USA' AND pop_max > 1000000",
+                    cartocss: '#layer {marker-line-color: #FFF; marker-line-width: 1; marker-width: 10; marker-fill: #3E7BB6;}'}]
             };
             cartodb.Tiles.getTiles(layerData, function (tiles, err) {
                 if (tiles == null) {
@@ -63,8 +63,8 @@
             var dataSource = new Cesium.GeoJsonDataSource();
             viewer.dataSources.add(dataSource);
 
-            var sql = new cartodb.SQL({user: 'dcarrion', format: 'geoJSON'});
-            sql.execute("SELECT * FROM twitter_test")
+            var sql = new cartodb.SQL({user: 'cartotraining', format: 'geoJSON'});
+            sql.execute("SELECT * FROM ne_10m_populated_places_simple WHERE adm0_a3 like 'USA' AND pop_max > 1000000")
                     .done(function (data) {
                         dataSource.load(data)
                                 .then(function () {
