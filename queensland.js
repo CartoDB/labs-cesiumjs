@@ -13,12 +13,12 @@ function setupLayers(tiles) {
     addBaseLayerOption(
             'CartoDB Light',
             new Cesium.CartoDBImageryProvider({
-                url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
             }));
     addBaseLayerOption(
             'CartoDB Dark',
             new Cesium.CartoDBImageryProvider({
-                url: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+                url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'
             }));
     addBaseLayerOption(
             'CartoDB Flat Blue',

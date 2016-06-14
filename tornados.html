@@ -21,12 +21,12 @@
     </head>
     <body>
         <div id="cesiumContainer"></div>
-        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.core.js"></script>
+        <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.core.js"></script>
         <script src="cesium-cartodb.min.js"></script>
         <script>
             // Basemap
             var basemapProvider = new Cesium.CartoDBImageryProvider({
-                url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
                 credit: 'Basemap courtesy of CartoDB'
             });
             var viewer = new Cesium.Viewer('cesiumContainer', {
