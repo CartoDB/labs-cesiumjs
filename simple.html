@@ -45,6 +45,7 @@
             // Tile data layer (circles)
             var layerData = {
                 user_name: 'cartotraining',
+                maps_api_template: 'https://{user}.cartodb.com', // Optional
                 sublayers: [{
                     sql: "SELECT * FROM ne_10m_populated_places_simple WHERE adm0_a3 like 'USA' AND pop_max > 1000000",
                     cartocss: '#layer {marker-line-color: #FFF; marker-line-width: 1; marker-width: 10; marker-fill: #3E7BB6;}'}]

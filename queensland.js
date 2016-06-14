@@ -119,6 +119,7 @@ function main(){
     var cdb_layers = {
         ward_offices : {
             user_name: cartodbUser,
+            maps_api_template: 'https://{user}.cartodb.com', // Optional
             sublayers: [{
                 sql: 'SELECT * FROM ward_offices',
                 "cartocss_version":"2.1.0",
@@ -127,6 +128,7 @@ function main(){
         },
         qualifications: {
             user_name: cartodbUser,
+            maps_api_template: 'https://{user}.cartodb.com', // Optional
             sublayers:[{
                 sql: 'SELECT a.* FROM solutions.high_qualification a, solutions.qld_border b WHERE ST_Intersects(ST_Centroid(a.the_geom), b.the_geom)',
                 "cartocss_version":"2.1.0",
@@ -135,6 +137,7 @@ function main(){
         },
         protected_areas : {
             user_name: cartodbUser,
+            maps_api_template: 'https://{user}.cartodb.com', // Optional
             sublayers:[{
                 sql: 'SELECT nameabbrev,  st_union(st_buffer(the_geom_webmercator,40)) as the_geom_webmercator FROM protected_areas GROUP BY nameabbrev',
                 "cartocss_version":"2.1.0",
@@ -143,6 +146,7 @@ function main(){
         },
         roads: {
             user_name: cartodbUser,
+            maps_api_template: 'https://{user}.cartodb.com', // Optional
             sublayers:[{
                 sql: 'SELECT * FROM state_controlled_roads where carrway is not null ',
                 "cartocss_version":"2.1.0",
